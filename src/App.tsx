@@ -1,19 +1,6 @@
 import {
-  Activity,
-  ChevronDown,
-  Command,
-  Compass,
-  FolderKanban,
-  LayoutDashboard,
-  Menu,
-  Moon,
-  PanelLeftClose,
-  Plus,
-  Search,
-  Settings,
-  Sun,
-  UserRound,
-  Waves,
+  Activity, ChevronDown, Command, Compass, FolderKanban, LayoutDashboard,
+  Moon, Plus, Search, Settings, Sun, UserRound, Waves,
 } from "lucide-react"
 import RipplesPage from "@/features/ripples/RipplesPage"
 import { useEffect, useState } from "react"
@@ -23,15 +10,15 @@ type Theme = "dark" | "light"
 
 const navigation = [
   { label: "Overview", icon: LayoutDashboard },
+  { label: "Planner", icon: Command },
   { label: "Projects", icon: FolderKanban },
+  { label: "Goals", icon: Compass },
   { label: "Ripples", icon: Waves },
   { label: "Activity", icon: Activity },
-  { label: "Explore", icon: Compass },
 ]
 
 export default function App() {
   const [theme, setTheme] = useState<Theme>("dark")
-  const [sidebarOpen, setSidebarOpen] = useState(true)
   const [activeSection, setActiveSection] = useState("Ripples")
 
   useEffect(() => {
@@ -41,65 +28,35 @@ export default function App() {
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark")
+    document.documentElement.classList.toggle("light", theme === "light")
     window.localStorage.setItem("dashboard-theme", theme)
   }, [theme])
 
   return (
-    <div className={`workspace-shell ${sidebarOpen ? "" : "sidebar-collapsed"}`}>
-      <aside className={`workspace-sidebar ${sidebarOpen ? "is-open" : "is-closed"}`}>
-        <div className="workspace-brand-row">
-          <a href="#" className="workspace-brand" aria-label="Pappmilan home">
-            <span className="workspace-brand-mark"><Waves size={19} /></span>
-            <span><strong>pappmilan</strong><small>PERSONAL WORKSPACE</small></span>
+    <div className="workspace-shell">
+      <main className="workspace-main">
+        <header className="workspace-topbar">
+          <a href="#" className="workspace-brand" aria-label="Pappmilan workspace home">
+            <span className="workspace-brand-mark"><Waves size={21} /></span>
+            <span className="workspace-brand-word">P<span>·</span></span>
           </a>
-          <Button variant="ghost" size="icon" className="workspace-sidebar-toggle" onClick={() => setSidebarOpen(false)} aria-label="Close sidebar">
-            <PanelLeftClose className="size-4" />
-          </Button>
-        </div>
-
-        <button className="workspace-create" type="button">
-          <span><Plus size={16} /></span> New workspace <kbd>⌘ K</kbd>
-        </button>
-        <button className="workspace-search" type="button">
-          <Search size={15} /> <span>Search workspace</span><kbd>⌘ /</kbd>
-        </button>
-
-        <div className="workspace-nav-group">
-          <p className="workspace-nav-label">WORKSPACE</p>
-          <nav aria-label="Workspace navigation">
+          <nav className="workspace-primary-nav" aria-label="Main navigation">
             {navigation.map(({ label, icon: Icon }) => (
               <button key={label} type="button" onClick={() => setActiveSection(label)}
                 className={`workspace-nav-item ${activeSection === label ? "active" : ""}`}
                 aria-current={activeSection === label ? "page" : undefined}>
-                <Icon size={17} strokeWidth={1.8} /><span>{label}</span>
-                {activeSection === label && <i />}
+                <Icon size={15} strokeWidth={1.7} /><span>{label}</span>
               </button>
             ))}
           </nav>
-        </div>
-
-        <div className="workspace-sidebar-bottom">
-          <button className="workspace-nav-item" type="button"><Settings size={17} /><span>Settings</span></button>
-          <div className="workspace-profile">
-            <div className="workspace-avatar">MP</div>
-            <div className="workspace-profile-copy"><strong>Milán Papp</strong><span>Personal workspace</span></div>
-            <ChevronDown size={15} />
-          </div>
-        </div>
-      </aside>
-
-      <main className="workspace-main">
-        <header className="workspace-topbar">
-          <div className="workspace-topbar-left">
-            {!sidebarOpen && <Button variant="ghost" size="icon" className="workspace-open-sidebar" onClick={() => setSidebarOpen(true)} aria-label="Open sidebar"><Menu size={17} /></Button>}
-            <div className="workspace-breadcrumb"><span>Workspace</span><ChevronDown size={14} /><strong>{activeSection}</strong></div>
-          </div>
           <div className="workspace-topbar-actions">
-            <span className="workspace-live-indicator"><i /> ALL SYSTEMS NORMAL</span>
-            <Button variant="outline" size="icon" className="workspace-theme-toggle" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}>
+            <Button variant="outline" size="icon" className="workspace-theme-toggle"
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}>
               {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
             </Button>
             <button className="workspace-user-button" type="button" aria-label="Account"><UserRound size={16} /></button>
+            <button className="workspace-account" type="button"><span className="workspace-avatar">MP</span><span>Milán Papp</span><ChevronDown size={14} /></button>
           </div>
         </header>
 
