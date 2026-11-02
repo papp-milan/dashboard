@@ -378,3 +378,20 @@
 .ripple-category-item{background:linear-gradient(145deg,#ffffff10,#ffffff05)}
 .ripple-palette button.selected{box-shadow:0 0 0 2px #F4680A}
 @media(max-width:620px){.ripple-stat-card{min-height:118px}}
+
+
+/* Full-width responsive dashboard layout — intentionally overrides legacy V2 max-width. */
+.ripples-page{display:block;width:100%;max-width:none;min-width:0;margin:0;padding-inline:clamp(22px,4.2vw,76px)}
+.ripples-heading,.ripple-focus-card,.ripple-stats,.ripple-toolbar,.ripple-flow-heading,.ripple-flow{width:100%;max-width:none}
+.ripple-flow{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:clamp(16px,2vw,30px);row-gap:18px;align-items:stretch;padding-inline:0}
+.ripple-orb-wrap{width:100%;min-width:0;transform:none}
+.ripple-orb,.ripple-add-orb{width:100%;min-width:0;min-height:116px;aspect-ratio:auto}
+.ripple-complete-control{right:15px;bottom:15px}
+@media(max-width:1050px){
+ .ripples-page{padding-inline:clamp(20px,3vw,36px)}
+ .ripple-flow{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:620px){
+ .ripples-page{padding-inline:16px}
+ .ripple-flow{grid-template-columns:1fr}
+}
