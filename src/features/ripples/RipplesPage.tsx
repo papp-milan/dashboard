@@ -1,6 +1,6 @@
 import {
   Activity, BookOpen, Check, ChevronDown, Code2, Dumbbell, Droplets, Footprints,
-  Heart, Moon, NotebookPen, Plus, Sparkles, X, Target, CalendarDays, ArrowLeft,
+  Heart, Moon, NotebookPen, Plus, Sparkles, X, Target,
 } from "lucide-react"
 import { useMemo, useState } from "react"
 import type { CSSProperties, FormEvent } from "react"
