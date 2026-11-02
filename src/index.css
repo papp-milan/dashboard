@@ -29,3 +29,16 @@
 .dark{--primary:#F4680A;--primary-foreground:#170800;--ring:#F4680A;--accent:#48200f;--accent-foreground:#fff;--border:#ffffff29}
 .workspace-brand-mark{border-color:#F4680A;color:#ffbd78;background:linear-gradient(145deg,#F4680A66,#FF4D8D18);box-shadow:0 0 28px #F4680A55,inset 0 1px #ffffff75}
 .workspace-brand-word span{color:#F4680A}.workspace-nav-item.active:after{background:linear-gradient(90deg,transparent,#F4680A,transparent);box-shadow:0 0 16px #F4680A}.workspace-overline{color:#F99D45}
+
+
+/* Application-wide smoked glass shell and restrained Spanish Orange accent. */
+.dark{--primary:#F4680A;--primary-foreground:#170800;--ring:#F4680A;--accent:#292d33;--accent-foreground:#f5f5f6;--border:#ffffff20}
+.workspace-shell{background:#07090d;color:#f2f3f5}
+.workspace-main{background:radial-gradient(ellipse at 58% -22%,#a9bfd015,transparent 46rem),radial-gradient(ellipse at 5% 42%,#F4680A08,transparent 34rem),#07090d}
+.workspace-topbar{border-bottom-color:#ffffff18;background:linear-gradient(180deg,#090c11f5,#090c11e8);backdrop-filter:blur(30px) saturate(130%)}
+.workspace-brand-mark{border-color:#F4680A70;color:#ffad79;background:linear-gradient(145deg,#F4680A26,#ffffff06);box-shadow:inset 0 1px #ffffff55,0 0 18px #F4680A12}
+.workspace-brand-word span{color:#F4680A}
+.workspace-nav-item.active:after{background:linear-gradient(90deg,transparent,#F4680A,transparent);box-shadow:0 0 10px #F4680A55}
+.workspace-overline{color:#e99a68}
+.workspace-theme-toggle,.workspace-user-button,.workspace-account{border-color:#ffffff24!important;background:linear-gradient(145deg,#ffffff12,#ffffff04)!important}
+.light .workspace-main{background:#e7e8eb}
