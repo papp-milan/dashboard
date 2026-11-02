@@ -120,6 +120,7 @@ export default function RipplesPage() {
         <button type="button" className="ripple-primary-action" onClick={() => setShowCreate(true)}><Plus size={17} /> New ripple</button>
       </div>
 
+      {goal && (
       <section className="ripple-focus-card" aria-label="Main goal">
         <div className="ripple-focus-top"><div><span className="ripple-focus-kicker"><Target size={14} /> YOUR FOCUS</span><h2>{goal ? goal.name : "Choose what matters most"}</h2>
           <p>{goal ? "One meaningful action to keep in sight. Your other habits remain just as important." : "Set an optional Main Goal. Without one, every habit has equal importance."}</p></div>
@@ -134,6 +135,7 @@ export default function RipplesPage() {
           {goal && <button type="button" className="ripple-focus-check" onClick={() => toggleCompletion(goal.id)}>{todayCompletions.has(goal.id) ? <><Check size={15} /> Tracked today</> : <><Plus size={15} /> Track today</>}</button>}
         </div>
       </section>
+      )}
 
       <section className="ripple-stats" aria-label="Habit progress">
         <div className="ripple-stat-card"><span className="ripple-stat-icon violet"><Activity size={17} /></span><div><strong>{activeHabits.length}</strong><span>Active habits</span></div></div>
