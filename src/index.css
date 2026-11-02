@@ -24,3 +24,8 @@
 .workspace-overline{color:#d8ff35}
 .workspace-theme-toggle,.workspace-user-button,.workspace-account{border-color:#a994ff55!important;background:linear-gradient(145deg,#ffffff1c,#ffffff08)!important}
 .light .workspace-main{background:#f1efff}
+
+/* Spanish Orange — primary application accent */
+.dark{--primary:#F4680A;--primary-foreground:#170800;--ring:#F4680A;--accent:#48200f;--accent-foreground:#fff;--border:#ffffff29}
+.workspace-brand-mark{border-color:#F4680A;color:#ffbd78;background:linear-gradient(145deg,#F4680A66,#FF4D8D18);box-shadow:0 0 28px #F4680A55,inset 0 1px #ffffff75}
+.workspace-brand-word span{color:#F4680A}.workspace-nav-item.active:after{background:linear-gradient(90deg,transparent,#F4680A,transparent);box-shadow:0 0 16px #F4680A}.workspace-overline{color:#F99D45}
