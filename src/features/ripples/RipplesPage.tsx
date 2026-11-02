@@ -13,7 +13,7 @@ const iconMap = {
   book: BookOpen, dumbbell: Dumbbell, droplets: Droplets, code: Code2,
   footprints: Footprints, "notebook-pen": NotebookPen, moon: Moon,
 } as const
-const palettes = ["#E79A86", "#A995E8", "#79BFAE", "#7EAED8", "#E6B96E", "#D98FB4"]
+const palettes = ["#F4680A", "#F99D45", "#FF4D8D", "#00D9FF", "#9B6BFF", "#A5FF00"]
 const today = () => localDateKey()
 const readSaved = <T,>(key: string, fallback: T): T => {
   try { const value = localStorage.getItem(key); return value ? JSON.parse(value) as T : fallback } catch { return fallback }
