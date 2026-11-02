@@ -3,6 +3,7 @@ import {
   Heart, Moon, NotebookPen, Plus, Sparkles, X,
 } from "lucide-react"
 import { useMemo, useState } from "react"
+import type { CSSProperties, FormEvent } from "react"
 import { demoCategories, demoCompletions, demoHabits } from "./ripple-demo-data"
 import { getCompletionRate, getCurrentStreak, localDateKey, sortNewestFirst } from "./ripple-utils"
 import type { RippleCategory, RippleCompletion, RippleHabit, RipplePeriod } from "./types"
@@ -15,10 +16,6 @@ const iconMap = {
 
 const palettes = ["#E79A86", "#A995E8", "#79BFAE", "#7EAED8", "#E6B96E", "#D98FB4"]
 const today = () => localDateKey()
-
-function initials(name: string) {
-  return name.trim().slice(0, 1).toUpperCase() || "R"
-}
 
 function RippleOrb({
   habit, category, completed, onSelect, onToggle, index,
@@ -39,7 +36,7 @@ function RippleOrb({
       <button
         type="button"
         className={`ripple-orb ${completed ? "is-complete" : ""}`}
-        style={{ "--ripple-color": color } as React.CSSProperties}
+        style={{ "--ripple-color": color } as CSSProperties}
         onClick={onSelect}
         aria-label={`${habit.name}, ${completed ? "completed today" : "not completed today"}. Open details.`}
       >
@@ -92,7 +89,7 @@ export default function RipplesPage() {
     setCompletions(current => [...current, { id: `${habitId}-${today()}`, habitId, completedOn: today(), completedAt }])
   }
 
-  function createHabit(event: React.FormEvent<HTMLFormElement>) {
+  function createHabit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const name = habitName.trim()
     if (!name || !habitCategory) return
@@ -110,7 +107,7 @@ export default function RipplesPage() {
     setSelectedHabitId(habit.id)
   }
 
-  function createCategory(event: React.FormEvent<HTMLFormElement>) {
+  function createCategory(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     const name = categoryName.trim()
     if (!name) return
@@ -202,7 +199,7 @@ export default function RipplesPage() {
         <div className="ripple-overlay" role="presentation" onMouseDown={event => { if (event.target === event.currentTarget) setSelectedHabitId(null) }}>
           <aside className="ripple-detail-panel" role="dialog" aria-modal="true" aria-labelledby="ripple-detail-title">
             <button className="ripple-modal-close" onClick={() => setSelectedHabitId(null)} aria-label="Close details"><X size={18} /></button>
-            <div className="ripple-detail-orb" style={{ "--ripple-color": selectedCategory?.color ?? "#A995E8" } as React.CSSProperties}><Sparkles size={27} /></div>
+            <div className="ripple-detail-orb" style={{ "--ripple-color": selectedCategory?.color ?? "#A995E8" } as CSSProperties}><Sparkles size={27} /></div>
             <span className="ripple-detail-kicker">{selectedCategory?.name ?? "Unsorted"}</span>
             <h2 id="ripple-detail-title">{selected.name}</h2>
             <p>{selected.description ?? "A small action, repeated consistently, creates meaningful momentum."}</p>
