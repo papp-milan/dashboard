@@ -10,10 +10,10 @@ const day = (offset: number) => {
 const stamp = (offset: number) => day(offset).toISOString()
 
 export const demoCategories: RippleCategory[] = [
-  { id: "fitness", name: "Fitness", color: "#E79A86", createdAt: stamp(-60), updatedAt: stamp(-60) },
-  { id: "learning", name: "Learning", color: "#A995E8", createdAt: stamp(-58), updatedAt: stamp(-58) },
-  { id: "health", name: "Health", color: "#79BFAE", createdAt: stamp(-56), updatedAt: stamp(-56) },
-  { id: "personal", name: "Personal", color: "#7EAED8", createdAt: stamp(-54), updatedAt: stamp(-54) },
+  { id: "fitness", name: "Fitness", color: "#FF4D8D", createdAt: stamp(-60), updatedAt: stamp(-60) },
+  { id: "learning", name: "Learning", color: "#9B6BFF", createdAt: stamp(-58), updatedAt: stamp(-58) },
+  { id: "health", name: "Health", color: "#A5FF00", createdAt: stamp(-56), updatedAt: stamp(-56) },
+  { id: "personal", name: "Personal", color: "#00D9FF", createdAt: stamp(-54), updatedAt: stamp(-54) },
 ]
 
 export const demoHabits: RippleHabit[] = [
