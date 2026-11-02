@@ -23,7 +23,7 @@ import { Button } from "@/components/ui/button"
 type Theme = "dark" | "light"
 
 const navigation = [
-  { label: "Overview", icon: LayoutDashboard, active: true },
+  { label: "Overview", icon: LayoutDashboard },
   { label: "Projects", icon: FolderKanban },
   { label: "Ripples", icon: Waves },
   { label: "Activity", icon: Activity },
