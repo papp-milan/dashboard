@@ -209,5 +209,5 @@
   .ripples-page .ripple-orb { width:116px; }
 }
 @media(prefers-reduced-motion:reduce) {
-  .ripples-page.ripple-focus:before,.ripples-page.ripple-focus:after { display:none; }
+  .ripples-page.ripples-focus:before,.ripples-page.ripples-focus:after { display:none; }
 }
