@@ -14,15 +14,18 @@ import {
   Settings,
   Sun,
   UserRound,
+  Waves,
 } from "lucide-react"
+import RipplesPage from "@/features/ripples/RipplesPage"
 import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 
 type Theme = "dark" | "light"
 
 const navigation = [
-  { label: "Overview", icon: LayoutDashboard, active: true },
+  { label: "Overview", icon: LayoutDashboard },
   { label: "Projects", icon: FolderKanban },
+  { label: "Ripples", icon: Waves },
   { label: "Activity", icon: Activity },
   { label: "Explore", icon: Compass },
 ]
@@ -30,6 +33,7 @@ const navigation = [
 export default function App() {
   const [theme, setTheme] = useState<Theme>("dark")
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const [activeSection, setActiveSection] = useState("Overview")
 
   useEffect(() => {
     const savedTheme = window.localStorage.getItem("dashboard-theme") as Theme | null
@@ -77,10 +81,11 @@ export default function App() {
         <div className="px-3 pt-4">
           <p className="px-2 pb-2 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground/70">Workspace</p>
           <nav className="space-y-1">
-            {navigation.map(({ label, icon: Icon, active }) => (
+            {navigation.map(({ label, icon: Icon }) => (
               <button
                 key={label}
-                className={`flex h-9 w-full items-center gap-3 rounded-lg px-2.5 text-sm transition-colors ${active ? "bg-sidebar-accent font-medium text-sidebar-foreground" : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"}`}
+                onClick={() => setActiveSection(label)}
+                className={`flex h-9 w-full items-center gap-3 rounded-lg px-2.5 text-sm transition-colors ${activeSection === label ? "bg-sidebar-accent font-medium text-sidebar-foreground" : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"}`}
               >
                 <Icon className="size-[17px]" />
                 {label}
@@ -135,6 +140,9 @@ export default function App() {
           </div>
         </header>
 
+        {activeSection === "Ripples" ? (
+          <section className="min-w-0 flex-1"><RipplesPage /></section>
+        ) : (
         <section className="flex flex-1 items-center justify-center px-5 py-16">
           <div className="w-full max-w-3xl">
             <div className="mx-auto mb-10 max-w-xl text-center">
@@ -165,6 +173,7 @@ export default function App() {
             </div>
           </div>
         </section>
+        )}
         <footer className="px-6 pb-5 text-center text-[11px] text-muted-foreground/60">PAPPMILAN DASHBOARD · WORKSPACE</footer>
       </main>
     </div>
