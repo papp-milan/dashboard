@@ -21,6 +21,12 @@ export default function App() {
     if (saved === "light" || saved === "dark") setTheme(saved)
   }, [])
   useEffect(() => {
+    if (!showWelcome) return
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { dismissWelcome(); return }
+    const timer = window.setTimeout(dismissWelcome, 1900)
+    return () => window.clearTimeout(timer)
+  }, [showWelcome])
+  useEffect(() => {
     document.documentElement.classList.toggle("dark", theme === "dark")
     document.documentElement.classList.toggle("light", theme === "light")
     window.localStorage.setItem("dashboard-theme", theme)
