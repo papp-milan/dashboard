@@ -1,6 +1,6 @@
 import {
   Activity, ChevronDown, Command, Compass, FolderKanban, LayoutDashboard,
-  Moon, Plus, Search, Settings, Sun, UserRound, Waves,
+  Moon, Sun, UserRound, Waves,
 } from "lucide-react"
 import RipplesPage from "@/features/ripples/RipplesPage"
 import { useEffect, useState } from "react"
