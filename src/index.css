@@ -13,3 +13,14 @@
 @media(max-width:850px){.workspace-topbar{gap:20px;padding:0 22px}.workspace-primary-nav{gap:18px}.workspace-account span:not(.workspace-avatar){display:none}}
 @media(max-width:620px){.workspace-topbar{min-height:65px;gap:13px;padding:0 13px}.workspace-brand-mark{width:34px;height:34px}.workspace-primary-nav{overflow-x:auto;gap:15px;scrollbar-width:none}.workspace-primary-nav::-webkit-scrollbar{display:none}.workspace-nav-item{min-height:65px;font-size:10px}.workspace-nav-item.active:after{bottom:10px}.workspace-topbar-actions{gap:6px}.workspace-user-button{display:none}.workspace-account{min-height:35px;padding:0 7px}.workspace-theme-toggle{width:34px!important;height:34px!important}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* Electric high-contrast workspace accents */
+.dark{--primary:#d8ff35;--primary-foreground:#101300;--ring:#d8ff35;--accent:#30205a;--accent-foreground:#fff;--border:#ffffff29}
+.workspace-main{background:radial-gradient(ellipse at 12% -15%,#4a20ff40,transparent 42rem),radial-gradient(ellipse at 95% 45%,#ff3d7f1c,transparent 32rem),#080516}
+.workspace-topbar{border-bottom-color:#ffffff24;background:linear-gradient(180deg,#0b0718f7,#0b0718e8)}
+.workspace-brand-mark{border-color:#d8ff3580;color:#e8ff70;background:linear-gradient(145deg,#d8ff3540,#ff3d8f18);box-shadow:0 0 28px #d8ff352e,inset 0 1px #ffffff75}
+.workspace-brand-word span{color:#d8ff35}
+.workspace-nav-item.active:after{background:linear-gradient(90deg,transparent,#d8ff35,transparent);box-shadow:0 0 16px #d8ff35}
+.workspace-overline{color:#d8ff35}
+.workspace-theme-toggle,.workspace-user-button,.workspace-account{border-color:#a994ff55!important;background:linear-gradient(145deg,#ffffff1c,#ffffff08)!important}
+.light .workspace-main{background:#f1efff}
