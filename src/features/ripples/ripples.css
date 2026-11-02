@@ -281,3 +281,18 @@
 .ripple-history-switch button.active{color:#101300;background:linear-gradient(145deg,#efff83,#b8ff00);box-shadow:0 0 22px #d8ff3540}
 .ripple-modal-close{border-color:#ffffff45;background:linear-gradient(145deg,#ffffff24,#ffffff08)}
 @media(max-width:620px){.ripple-stat-card{min-height:118px}}
+
+/* Spanish Orange is the unmistakable primary accent */
+.ripples-page{--amber:#F4680A;--primary-accent:#F4680A;background:radial-gradient(ellipse at 8% 8%,#F4680A38,transparent 34rem),radial-gradient(ellipse at 92% 22%,#FF4D8D2e,transparent 31rem),radial-gradient(ellipse at 55% 100%,#00D9FF20,transparent 40rem),#080516}
+.ripples-eyebrow,.ripple-detail-kicker,.ripple-focus-kicker{color:#F99D45}.ripples-eyebrow span{background:#F4680A;box-shadow:0 0 16px #F4680A}
+.ripple-primary-action{border-color:#ffb276;color:#1b0900;background:linear-gradient(125deg,#ffbd78 0%,#F99D45 34%,#F4680A 100%);box-shadow:0 0 0 1px #F4680A45,0 10px 34px #F4680A55,inset 0 1px #fff}
+.ripple-primary-action:hover{box-shadow:0 0 0 1px #ffd0a080,0 14px 42px #F4680A80,inset 0 1px #fff}
+.ripple-focus-card{background:radial-gradient(ellipse at 92% 0%,#F4680A55,transparent 35%),radial-gradient(ellipse at 0% 100%,#FF4D8D35,transparent 48%),linear-gradient(125deg,#48200fe8,#17102beF 72%)}
+.ripple-focus-card:after{border-color:#F4680A80;box-shadow:0 0 0 18px #F4680A20,0 0 0 42px #00D9FF12,0 0 110px #F4680A45}
+.ripple-focus-symbol{border-color:#F4680A;color:#ffc18d;background:linear-gradient(145deg,#F4680A55,#FF4D8D20);box-shadow:0 0 38px #F4680A50,inset 0 1px #fff8}
+.ripple-focus-check{border-color:#F4680A;color:#ffb276;background:#F4680A30}.ripple-focus-check:hover{background:#F4680A55}
+.ripple-stat-card:nth-child(3){background:radial-gradient(ellipse at 100% 0%,#A5FF0055,transparent 58%),linear-gradient(145deg,#33451a,#151a20)}.ripple-stat-icon.mint{color:#A5FF00}
+.ripple-filters button.active{border-color:#F4680A;color:#ffb276;background:linear-gradient(135deg,#F4680A35,#ffffff0c);box-shadow:inset 0 1px #ffffff30,0 0 22px #F4680A30}
+.ripple-complete-control.done{border-color:#ffbd78;color:#1b0900;background:linear-gradient(145deg,#ffbd78,#F4680A);box-shadow:0 0 24px #F4680A90}
+.ripple-add-orb{border-color:#F4680A90;color:#ffb276;background:linear-gradient(145deg,#F4680A25,#00D9FF0c)}.ripple-add-orb:hover{border-color:#ffbd78;color:#ffd0a0;background:#F4680A40;box-shadow:0 0 34px #F4680A45}
+.ripple-history-switch button.active{color:#1b0900;background:linear-gradient(145deg,#ffbd78,#F4680A);box-shadow:0 0 22px #F4680A50}
