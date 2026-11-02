@@ -83,3 +83,131 @@
  .ripple-focus-card{padding:19px}.ripple-focus-controls{align-items:flex-start}.ripple-focus-controls label{width:100%}.ripple-focus-controls select{flex:1;min-width:0}.ripple-focus-symbol{width:43px;height:43px}
  .ripple-history-panel{height:min(92dvh,820px)}.ripple-year-grid{gap:7px}.ripple-year-month{padding:9px}.ripple-year-month .ripple-history-dot{width:6px;height:6px}
 }
+
+
+/* Ripples — glass pulse visual system */
+.ripples-page.ripples-focus {
+  --ripple-amber: #e6a34d;
+  --ripple-amber-soft: #ffc978;
+  --ripple-steel: #8ca4bd;
+  --ripple-violet: #a88bff;
+  --ripple-ice: #b9d5e8;
+  position: relative;
+  isolation: isolate;
+  min-height: 100%;
+  overflow: hidden;
+  padding: clamp(24px, 4vw, 54px);
+  color: #f1f0ed;
+  background:
+    radial-gradient(ellipse at 13% 12%, #a85d241b, transparent 34%),
+    radial-gradient(ellipse at 90% 44%, #526d9b18, transparent 36%),
+    linear-gradient(145deg, #090a0d 0%, #0c0e13 54%, #090a0e 100%);
+}
+.ripples-page.ripples-focus:before,
+.ripples-page.ripples-focus:after {
+  content: ""; position: absolute; z-index: -1; pointer-events: none;
+  width: 46vw; height: 46vw; border-radius: 50%; filter: blur(50px); opacity: .18;
+}
+.ripples-page.ripples-focus:before { top: -27vw; left: 8%; background: #b56d35; }
+.ripples-page.ripples-focus:after { right: -30vw; bottom: -25vw; background: #596eae; }
+.ripples-page .ripples-heading { margin-bottom: 30px; }
+.ripples-page .ripples-eyebrow { color: #d9a15b; letter-spacing: .2em; }
+.ripples-page .ripples-eyebrow span { background: #e6a34d; box-shadow: 0 0 12px #e6a34d99; }
+.ripples-page .ripples-heading h1 { color: #f4f2ee; font-size: clamp(30px, 4vw, 43px); letter-spacing: -.055em; }
+.ripples-page .ripples-heading p { color: #9297a2; }
+.ripples-page .ripple-primary-action {
+  border: 1px solid #f4c27b66; border-radius: 12px;
+  background: linear-gradient(135deg,#f2bd70,#c7833e 75%,#9c612e);
+  color: #17120d; box-shadow: 0 8px 26px #d28b3c22, inset 0 1px #fff8;
+}
+.ripples-page .ripple-focus-card,
+.ripples-page .ripple-stat-card,
+.ripples-page .ripple-history-section,
+.ripples-page .ripple-year-month,
+.ripples-page .ripple-category-item {
+  position: relative; isolation: isolate; overflow: hidden;
+  border: 1px solid #ffffff18; border-radius: 20px;
+  background: linear-gradient(145deg,#ffffff0c,#ffffff04 45%,#ffffff08);
+  box-shadow: inset 0 1px #ffffff18, 0 18px 45px #00000025;
+  backdrop-filter: blur(22px) saturate(125%);
+}
+.ripples-page .ripple-focus-card:before,
+.ripples-page .ripple-stat-card:before,
+.ripples-page .ripple-history-section:before {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: repeating-linear-gradient(90deg,transparent 0 5px,#ffffff08 6px,transparent 7px 11px);
+  mask-image: linear-gradient(115deg,#000 0%,#0008 34%,transparent 74%);
+  opacity: .65;
+}
+.ripples-page .ripple-focus-card { padding: clamp(24px,3vw,36px); background: radial-gradient(ellipse at 13% 20%,#d58c3b24,transparent 48%),linear-gradient(135deg,#ffffff0d,#ffffff03 60%,#a88bff0a); }
+.ripples-page .ripple-focus-card:after { border-color: #e6a34d33; box-shadow: 0 0 0 28px #e6a34d0d,0 0 0 58px #e6a34d08,0 0 60px #e6a34d12; }
+.ripples-page .ripple-focus-kicker { color: #e9b46d; }
+.ripples-page .ripple-focus-top h2 { color: #f6f2ec; }
+.ripples-page .ripple-focus-top p,
+.ripples-page .ripple-stat-card span:not(.ripple-stat-icon) { color: #a4a8b1; }
+.ripples-page .ripple-focus-symbol { border-color: #e6a34d55; background: #e6a34d18; color: #f2bd70; box-shadow: 0 0 28px #e6a34d18; }
+.ripples-page .ripple-focus-controls label { color: #aeb2bb; }
+.ripples-page .ripple-focus-controls select,
+.ripples-page .ripple-period-select,
+.ripples-page .ripple-filters button.active,
+.ripples-page .ripple-focus-check {
+  border-color: #ffffff20; background: #ffffff0b; color: #e8e8e7; backdrop-filter: blur(14px);
+}
+.ripples-page .ripple-focus-check:hover,
+.ripples-page .ripple-filters button:hover,
+.ripples-page .ripple-quiet-action:hover { background: #ffffff14; color: #fff; }
+.ripples-page .ripple-stat-card { min-height: 96px; border-radius: 16px; }
+.ripples-page .ripple-stat-card strong { color: #f4f1ec; font-size: 25px; }
+.ripples-page .ripple-stat-icon.violet { color: #b9a4ff; background: #a88bff20; }
+.ripples-page .ripple-stat-icon.peach { color: #f1b76c; background: #e6a34d20; }
+.ripples-page .ripple-stat-icon.mint { color: #9dc8df; background: #8ca4bd20; }
+.ripples-page .ripple-toolbar { border-color: #ffffff16; }
+.ripples-page .ripple-filters button,
+.ripples-page .ripple-quiet-action { color: #9da2ad; }
+.ripples-page .ripple-filters button.active { color: #f5d2a0; box-shadow: inset 0 0 0 1px #e6a34d25; }
+.ripples-page .ripple-flow-heading h2 { color: #f1f0ed; }
+.ripples-page .ripple-flow-heading p,
+.ripples-page .ripple-flow-heading>span { color: #9297a2; }
+.ripples-page .ripple-flow { column-gap: clamp(14px,3vw,36px); row-gap: 30px; }
+.ripples-page .ripple-orb {
+  width: clamp(116px,13vw,158px); color: #f4f1ed;
+  border: 1px solid color-mix(in srgb,var(--ripple-color),white 34%);
+  background:
+    repeating-linear-gradient(90deg,#ffffff0a 0 1px,transparent 1px 5px),
+    radial-gradient(ellipse at 28% 12%,#ffffff55 0%,#ffffff12 20%,transparent 50%),
+    radial-gradient(ellipse at 76% 88%,color-mix(in srgb,var(--ripple-color),transparent 45%),transparent 62%),
+    linear-gradient(145deg,#ffffff18,#ffffff05 50%,#00000044);
+  box-shadow: inset 0 1px #ffffff55,inset 0 -18px 28px #00000036,0 14px 36px color-mix(in srgb,var(--ripple-color),transparent 78%),0 0 24px color-mix(in srgb,var(--ripple-color),transparent 90%);
+  backdrop-filter: blur(18px) saturate(145%);
+}
+.ripples-page .ripple-orb:after { content:""; position:absolute; inset:8px; border:1px solid #ffffff17; border-radius:50%; pointer-events:none; }
+.ripples-page .ripple-orb:hover { box-shadow:inset 0 1px #ffffff70,inset 0 -18px 28px #00000036,0 18px 42px color-mix(in srgb,var(--ripple-color),transparent 68%); }
+.ripples-page .ripple-orb-icon { border-color:#ffffff35; background:#ffffff17; color:var(--ripple-color); }
+.ripples-page .ripple-orb-category { color:#b6b5bd; }
+.ripples-page .ripple-complete-control { border-color:#ffffff24; background:#17191f; color:#d4d5d9; }
+.ripples-page .ripple-complete-control.done { border-color:#e6a34d; background:#e6a34d; color:#17120d; box-shadow:0 0 18px #e6a34d55; }
+.ripples-page .ripple-add-orb { border:1px dashed #ffffff35; background:#ffffff06; color:#aeb2bb; backdrop-filter:blur(16px); }
+.ripples-page .ripple-add-orb:hover { border-color:#e6a34d88; background:#e6a34d12; color:#f4c27b; }
+.ripples-page .ripple-overlay { background:#030407b8; backdrop-filter:blur(14px); }
+.ripples-page .ripple-detail-panel,
+.ripples-page .ripple-form-panel { border-color:#ffffff1c; background:linear-gradient(145deg,#171a21f5,#0b0d12f8); color:#f1f0ed; box-shadow:-25px 0 80px #0009; }
+.ripples-page .ripple-detail-panel>p,
+.ripples-page .ripple-detail-row span { color:#a4a8b1; }
+.ripples-page .ripple-history-switch { border-color:#ffffff18; background:#ffffff08; }
+.ripples-page .ripple-history-switch button.active { background:linear-gradient(135deg,#e6a34d,#bd7938); color:#17120d; }
+.ripples-page .ripple-history-dot { border-color:#ffffff35; }
+.ripples-page .ripple-history-dot.filled { box-shadow:0 0 10px color-mix(in srgb,var(--history-color),transparent 35%); }
+.ripples-page .ripple-history-legend { color:#a4a8b1; }
+.ripples-page .ripple-history-legend i.tracked { border-color:#e6a34d; background:#e6a34d; }
+.ripples-page .ripple-form input,
+.ripples-page .ripple-form select { border-color:#ffffff24; background:#ffffff0b; color:#f1f0ed; }
+.ripples-page .ripple-category-item { background:#ffffff08; }
+.ripples-page .ripple-category-item small { color:#a4a8b1; }
+@media(max-width:640px) {
+  .ripples-page.ripples-focus { padding:24px 18px 40px; }
+  .ripples-page .ripple-focus-card { border-radius:17px; }
+  .ripples-page .ripple-orb { width:116px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .ripples-page.ripples-focus:before,.ripples-page.ripples-focus:after { display:none; }
+}
