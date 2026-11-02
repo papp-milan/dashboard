@@ -1,7 +1,7 @@
 /* Reference-led visual system: smoked glass, steel reflections and warm amber light. */
 .ripples-page {
   --ink:#f4f3f1;--muted:#999ca7;--line:#ffffff18;--glass:#ffffff09;--amber:#edb86f;--steel:#9eb6cf;
-  position:relative;isolation:isolate;width:100%;max-width:1540px;min-height:100%;margin:0 auto;
+  position:relative;isolation:isolate;width:100%;max-width:none;min-height:100%;margin:0;
   padding:clamp(24px,3.6vw,54px) clamp(18px,5vw,76px) 56px;overflow:hidden;color:var(--ink);
   background:
     radial-gradient(ellipse at 84% 5%,#91a9c51b,transparent 33rem),
