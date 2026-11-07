@@ -1,6 +1,6 @@
 # Dashboard
 
-Minimal React + Vite + TypeScript dashboard foundation using shadcn/ui and Tailwind CSS v4.
+A minimal React, TypeScript, Vite, Tailwind CSS v4 and shadcn/ui starter.
 
 ## Development
 
@@ -15,10 +15,4 @@ npm run dev
 npm run build
 ```
 
-## Deployment
-
-Pushes to `main` are built and deployed to GitHub Pages. The custom domain is configured through `public/CNAME`.
-
-- `develop`: default integration branch
-- `main`: production deployment
-- `feature/*`: feature work
+GitHub Actions workflows in `.github/workflows` run CI and deploy the production branch to GitHub Pages.
