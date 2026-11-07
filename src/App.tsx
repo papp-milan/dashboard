@@ -12,20 +12,15 @@ export default function App() {
                 }}
             />
 
-            {/* Optional: Overlay for readability */}
-
             {/* Foreground content */}
             <section className="relative z-10 flex flex-col items-center gap-6 text-center">
                 <div className="space-y-2">
-                    <h1 className="text-3xl font-semibold tracking-tight">
-                        Hello, world.
+                    <h1 className="text-5xl font-semibold tracking-tight text-popover">
+                        Life is peak
                     </h1>
-                    <p className="text-sm text-muted-foreground">
-                        A clean starting point.
-                    </p>
                 </div>
 
-                <Button>Get started</Button>
+                <Button>Does nothing.</Button>
             </section>
         </main>
     )

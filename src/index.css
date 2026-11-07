@@ -1,4 +1,6 @@
+@import url("/fonts/Lora/Fonts/WEB/css/lora.css");
 @import "tailwindcss";
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -22,6 +24,8 @@
   --input: #e4e4e7;
   --ring: #a1a1aa;
   --radius: 0.625rem;
+
+  font-family: Lora-Regular, serif;
 }
 
 @theme inline {
