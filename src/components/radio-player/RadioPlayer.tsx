@@ -42,9 +42,9 @@ export function RadioPlayer() {
     const audioRef = useRef<HTMLAudioElement>(null)
     const audioContextRef = useRef<AudioContext | null>(null)
     const analyserRef = useRef<AnalyserNode | null>(null)
-    const sourceRef = useRef<MediaElementAudioSourceNode | null>(null)
     const animationFrameRef = useRef<number | null>(null)
     const barRefs = useRef<(HTMLDivElement | null)[]>([])
+    const frameRef = useRef(0)
 
     const [isPlaying, setIsPlaying] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -57,7 +57,7 @@ export function RadioPlayer() {
         artist: "SomaFM",
     })
 
-    // Fetch current track metadata
+    // Metadata
     const fetchMetadata = useCallback(async () => {
         try {
             const response = await fetch(METADATA_URL, {
@@ -69,9 +69,7 @@ export function RadioPlayer() {
             const data: unknown = await response.json()
             const currentTrack = getTrack(data)
 
-            if (currentTrack) {
-                setTrack(currentTrack)
-            }
+            if (currentTrack) setTrack(currentTrack)
         } catch {
             // Metadata is optional.
         }
@@ -79,23 +77,31 @@ export function RadioPlayer() {
 
     useEffect(() => {
         void fetchMetadata()
-
         const interval = window.setInterval(fetchMetadata, 30_000)
 
         return () => window.clearInterval(interval)
     }, [fetchMetadata])
 
-    // Apply volume
+    // Volume
+    const handleVolumeChange = (value: number) => {
+        const nextVolume = Math.max(0, Math.min(100, value))
+
+        setVolume(nextVolume)
+
+        if (audioRef.current) {
+            audioRef.current.volume = nextVolume / 100
+        }
+    }
+
     useEffect(() => {
         if (audioRef.current) {
             audioRef.current.volume = volume / 100
         }
     }, [volume])
 
-    // Initialize Web Audio API
+    // Audio analyser
     const initializeAudioAnalyser = async () => {
         const audio = audioRef.current
-
         if (!audio) return
 
         if (!audioContextRef.current) {
@@ -114,15 +120,14 @@ export function RadioPlayer() {
 
             audioContextRef.current = context
             analyserRef.current = analyser
-            sourceRef.current = source
         }
 
-        if (audioContextRef.current.state === "suspended") {
+        if (audioContextRef.current.state !== "running") {
             await audioContextRef.current.resume()
         }
     }
 
-    // Stop visualizer and smoothly return all bars to rest.
+    // Stop visualizer
     const stopVisualizer = useCallback(() => {
         if (animationFrameRef.current !== null) {
             cancelAnimationFrame(animationFrameRef.current)
@@ -148,55 +153,66 @@ export function RadioPlayer() {
         })
     }, [])
 
-    // Read actual audio frequencies and update bars.
+    // Visualizer with mobile fallback
     const startVisualizer = useCallback(() => {
         const analyser = analyserRef.current
-
         if (!analyser) return
 
         if (animationFrameRef.current !== null) {
             cancelAnimationFrame(animationFrameRef.current)
-            animationFrameRef.current = null
         }
 
         const frequencyData = new Uint8Array(analyser.frequencyBinCount)
 
-        barRefs.current.forEach((bar) => {
-            if (!bar) return
-            bar.style.transition = "height 80ms linear, opacity 80ms linear"
-        })
+        frameRef.current = 0
 
         const update = () => {
             analyser.getByteFrequencyData(frequencyData)
 
+            const hasAudioData = frequencyData.some((value) => value > 3)
+
+            frameRef.current++
+
             for (let index = 0; index < BAR_COUNT; index++) {
                 const bar = barRefs.current[index]
-
                 if (!bar) continue
 
-                const start = Math.floor(
-                    Math.pow(index / BAR_COUNT, 2) *
-                    frequencyData.length
-                )
+                let normalized = 0
 
-                const end = Math.max(
-                    start + 1,
-                    Math.floor(
-                        Math.pow((index + 1) / BAR_COUNT, 2) *
+                if (hasAudioData) {
+                    const start = Math.floor(
+                        Math.pow(index / BAR_COUNT, 2) *
                         frequencyData.length
                     )
-                )
 
-                let sum = 0
+                    const end = Math.max(
+                        start + 1,
+                        Math.floor(
+                            Math.pow((index + 1) / BAR_COUNT, 2) *
+                            frequencyData.length
+                        )
+                    )
 
-                for (let i = start; i < end; i++) {
-                    sum += frequencyData[i]
+                    let sum = 0
+
+                    for (let i = start; i < end; i++) {
+                        sum += frequencyData[i]
+                    }
+
+                    normalized = (sum / (end - start)) / 255
+                } else {
+                    const time = frameRef.current * 0.11
+                    normalized =
+                        0.12 +
+                        Math.abs(
+                            Math.sin(time + index * 0.65) *
+                            Math.cos(time * 0.7 + index * 0.3)
+                        ) * 0.65
                 }
 
-                const average = sum / (end - start)
-                const normalized = average / 255
                 const height = 3 + Math.pow(normalized, 1.15) * 34
 
+                bar.style.transition = "height 90ms linear, opacity 90ms linear"
                 bar.style.height = `${height}px`
                 bar.style.opacity = `${0.4 + normalized * 0.6}`
             }
@@ -210,7 +226,6 @@ export function RadioPlayer() {
     // Playback
     const togglePlayback = async () => {
         const audio = audioRef.current
-
         if (!audio) return
 
         if (!audio.paused) {
@@ -239,16 +254,7 @@ export function RadioPlayer() {
         }
     }
 
-    // Volume
-    const handleVolumeChange = (value: number) => {
-        setVolume(value)
-
-        if (audioRef.current) {
-            audioRef.current.volume = value / 100
-        }
-    }
-
-    // Clean up
+    // Cleanup
     useEffect(() => {
         return () => {
             if (animationFrameRef.current !== null) {
@@ -286,8 +292,8 @@ export function RadioPlayer() {
                 }}
                 onWaiting={() => setIsLoading(true)}
                 onPlaying={() => {
-                    setIsLoading(false)
                     setIsPlaying(true)
+                    setIsLoading(false)
                     startVisualizer()
                 }}
                 onError={(event) => {
@@ -301,29 +307,32 @@ export function RadioPlayer() {
 
                     setError(
                         `Fehler ${mediaError?.code ?? "unbekannt"}: ${
-                            mediaError?.message ??
-                            "Audio konnte nicht geladen werden."
+                            mediaError?.message ?? "Audio konnte nicht geladen werden."
                         }`
                     )
                 }}
             />
 
-            {/* Mobile launcher */}
+            {/* Mobile radio launcher */}
             <button
                 type="button"
                 onClick={() => setIsMobileOpen(true)}
                 aria-label="Radio-Player öffnen"
+                aria-expanded={isMobileOpen}
                 className={`
-                    ${isMobileOpen ? "hidden" : "flex"}
-                    sm:hidden
+                    flex sm:hidden
                     h-14 w-14 items-center justify-center
                     rounded-full border border-[#E8B47F]/40
-                    bg-[#211a16]/85 text-[#E8B47F]
+                    bg-[#211a16]/90 text-[#E8B47F]
                     shadow-[0_8px_30px_rgba(0,0,0,0.4),0_0_20px_rgba(217,154,97,0.12)]
                     backdrop-blur-2xl
                     transition-all duration-300
                     hover:bg-[#30241D]
                     active:scale-95
+                    ${isMobileOpen
+                    ? "pointer-events-none scale-75 opacity-0"
+                    : "scale-100 opacity-100"
+                }
                 `}
             >
                 <span className="relative">
@@ -340,19 +349,27 @@ export function RadioPlayer() {
                 </span>
             </button>
 
-            {/* Player panel: always visible on desktop, toggle on mobile */}
-            <div className={`
-                ${isMobileOpen ? "block" : "hidden"}
-                sm:block
-                w-[min(92vw,360px)]
-                sm:w-full
-            `}>
-
-                {/* Soft Glass Player */}
+            {/* Animated player panel */}
+            <div
+                className={`
+                    absolute bottom-0 right-0 w-[min(92vw,380px)]
+                    origin-bottom-right
+                    transition-[transform,visibility] duration-300
+                    ease-[cubic-bezier(0.22,1,0.36,1)]
+                    sm:static sm:w-full sm:origin-center
+                    ${isMobileOpen
+                    ? "visible translate-y-0 scale-100"
+                    : "invisible pointer-events-none translate-y-5 scale-95"
+                }
+                    sm:!visible sm:!pointer-events-auto
+                    sm:!translate-y-0 sm:!scale-100
+                `}
+                aria-hidden={!isMobileOpen}
+            >
                 <div className="
                     relative overflow-hidden rounded-2xl
                     border border-white/[0.13]
-                    bg-[#211a16]/75
+                    bg-[#211a16]/85
                     shadow-[0_12px_45px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.09)]
                     backdrop-blur-2xl
                 ">
@@ -372,8 +389,8 @@ export function RadioPlayer() {
 
                     {/* Main content */}
                     <div className="
-                        relative flex flex-col gap-4
-                        p-4 sm:flex-row sm:items-center sm:gap-5 sm:px-6
+                        relative flex flex-col gap-4 p-4
+                        sm:flex-row sm:items-center sm:gap-5 sm:px-6
                     ">
 
                         {/* Track information */}
@@ -394,17 +411,16 @@ export function RadioPlayer() {
                                 </p>
                             </div>
 
-                            {/* Mobile minimize button */}
+                            {/* Mobile close */}
                             <button
                                 type="button"
                                 onClick={() => setIsMobileOpen(false)}
                                 aria-label="Radio-Player minimieren"
                                 className="
-                                    -mr-1 -mt-1 flex h-8 w-8 shrink-0
-                                    items-center justify-center
-                                    rounded-full text-[#BBA995]
-                                    transition hover:bg-white/10
-                                    hover:text-[#F2C69A]
+                                    flex h-9 w-9 shrink-0 items-center
+                                    justify-center rounded-full
+                                    text-[#BBA995] transition
+                                    hover:bg-white/10 hover:text-[#F2C69A]
                                     sm:hidden
                                 "
                             >
@@ -445,11 +461,9 @@ export function RadioPlayer() {
                                     justify-center rounded-full
                                     border border-[#E8B47F]/60
                                     bg-[#D99A61]/15 text-[#F2C69A]
-                                    shadow-[0_0_18px_rgba(217,154,97,0.08)]
                                     transition-all duration-300
                                     hover:border-[#F1BD88]
                                     hover:bg-[#D99A61]/25
-                                    hover:shadow-[0_0_22px_rgba(217,154,97,0.2)]
                                     active:scale-95 disabled:opacity-50
                                 "
                             >
@@ -479,7 +493,7 @@ export function RadioPlayer() {
                                     }
                                     aria-label={volume === 0 ? "Unmute" : "Mute"}
                                     className="
-                                        flex h-9 w-8 items-center justify-center
+                                        flex h-10 w-9 items-center justify-center
                                         text-[#BBA995] transition
                                         hover:text-[#F2C69A]
                                     "
@@ -495,20 +509,24 @@ export function RadioPlayer() {
                                     type="range"
                                     min="0"
                                     max="100"
+                                    step="1"
                                     value={volume}
                                     onChange={(event) =>
                                         handleVolumeChange(Number(event.target.value))
                                     }
+                                    onInput={(event) =>
+                                        handleVolumeChange(Number(event.currentTarget.value))
+                                    }
                                     aria-label="Volume"
                                     className="
                                         radio-volume-slider
-                                        w-20 cursor-pointer
+                                        relative z-10 w-24 cursor-pointer
                                         sm:w-16
                                     "
                                 />
                             </div>
 
-                            {/* External link - desktop only */}
+                            {/* External link */}
                             <a
                                 href="https://somafm.com/groovesalad/"
                                 target="_blank"
@@ -532,13 +550,11 @@ export function RadioPlayer() {
                             relative border-t border-red-300/15
                             bg-red-950/20 px-5 py-2
                         ">
-                            <p className="text-xs text-red-300">
-                                {error}
-                            </p>
+                            <p className="text-xs text-red-300">{error}</p>
                         </div>
                     )}
 
-                    {/* Always-bottom SomaFM branding */}
+                    {/* SomaFM footer */}
                     <div className="
                         relative flex items-center justify-center
                         border-t border-white/[0.10]

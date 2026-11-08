@@ -81,10 +81,8 @@
 }
 
 /* =========================================
-   Cozy Radio - Audio Visualizer
+   Radio Player
    ========================================= */
-
-
 
 .radio-equalizer {
   display: flex;
@@ -102,53 +100,51 @@
   height: 3px;
   flex: 1;
   border-radius: 2px;
-  background: linear-gradient(
-          to top,
-          #b96c37,
-          #e9a66d
-  );
+  background: linear-gradient(to top, #b96c37, #e9a66d);
   opacity: 0.35;
 }
 
 .radio-volume-slider {
-  height: 24px;
+  display: block;
+  height: 32px;
   min-width: 0;
   appearance: none;
   -webkit-appearance: none;
   background: transparent;
-  touch-action: pan-x;
+  touch-action: pan-y;
+  cursor: pointer;
 }
 
 .radio-volume-slider::-webkit-slider-runnable-track {
-  height: 3px;
+  height: 4px;
   border-radius: 999px;
-  background: rgba(232, 196, 159, 0.2);
+  background: rgba(232, 196, 159, 0.25);
 }
 
 .radio-volume-slider::-moz-range-track {
-  height: 3px;
+  height: 4px;
   border-radius: 999px;
-  background: rgba(232, 196, 159, 0.2);
+  background: rgba(232, 196, 159, 0.25);
 }
 
 .radio-volume-slider::-webkit-slider-thumb {
-  width: 12px;
-  height: 12px;
-  margin-top: -4.5px;
+  width: 14px;
+  height: 14px;
+  margin-top: -5px;
   appearance: none;
   -webkit-appearance: none;
   border-radius: 50%;
   background: #e8c49f;
-  box-shadow: 0 0 8px rgba(232, 196, 159, 0.25);
+  box-shadow: 0 0 8px rgba(232, 196, 159, 0.3);
 }
 
 .radio-volume-slider::-moz-range-thumb {
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border: none;
   border-radius: 50%;
   background: #e8c49f;
-  box-shadow: 0 0 8px rgba(232, 196, 159, 0.25);
+  box-shadow: 0 0 8px rgba(232, 196, 159, 0.3);
 }
 
 /* =========================================

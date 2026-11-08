@@ -28,7 +28,7 @@ export default function App() {
                 href="https://github.com/papp-milan/dashboard"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group absolute bottom-6 right-6 md:left-6 z-10 h-8 w-8 md:h-12 md:w-12"
+                className="group absolute bottom-6 left-6 z-10 h-8 w-8 md:h-12 md:w-12"
             >
                 <img
                     src="/icons/github/github-white.svg"
