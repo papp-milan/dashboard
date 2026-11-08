@@ -106,26 +106,31 @@ export function RadioPlayer() {
         const audio = audioRef.current
         if (!audio) return
 
-        if (!audioContextRef.current) {
-            const context = new AudioContext()
-            const analyser = context.createAnalyser()
+        try {
+            if (!audioContextRef.current) {
+                const context = new AudioContext()
+                const analyser = context.createAnalyser()
 
-            analyser.fftSize = 512
-            analyser.smoothingTimeConstant = 0.78
-            analyser.minDecibels = -85
-            analyser.maxDecibels = -20
+                analyser.fftSize = 512
+                analyser.smoothingTimeConstant = 0.78
+                analyser.minDecibels = -85
+                analyser.maxDecibels = -20
 
-            const source = context.createMediaElementSource(audio)
+                const source = context.createMediaElementSource(audio)
 
-            source.connect(analyser)
-            analyser.connect(context.destination)
+                source.connect(analyser)
+                analyser.connect(context.destination)
 
-            audioContextRef.current = context
-            analyserRef.current = analyser
-        }
+                audioContextRef.current = context
+                analyserRef.current = analyser
+            }
 
-        if (audioContextRef.current.state !== "running") {
-            await audioContextRef.current.resume()
+            if (audioContextRef.current.state !== "running") {
+                await audioContextRef.current.resume()
+            }
+        } catch (err) {
+            // Playback must remain possible even if the analyser fails.
+            console.warn("Audio analyser unavailable:", err)
         }
     }
 
@@ -162,28 +167,36 @@ export function RadioPlayer() {
 
     // Visualizer
     const startVisualizer = useCallback(() => {
-        const analyser = analyserRef.current
-        if (!analyser) return
-
         if (animationFrameRef.current !== null) {
             cancelAnimationFrame(animationFrameRef.current)
         }
 
-        const frequencyData = new Uint8Array(analyser.frequencyBinCount)
+        const frequencyData = analyserRef.current
+            ? new Uint8Array(analyserRef.current.frequencyBinCount)
+            : null
 
         frameRef.current = 0
 
         const update = () => {
-            analyser.getByteFrequencyData(frequencyData)
+            const analyser = analyserRef.current
 
-            const hasAudioData = frequencyData.some((value) => value > 3)
+            if (analyser && frequencyData) {
+                try {
+                    analyser.getByteFrequencyData(frequencyData)
+                } catch {
+                    // Use fallback animation.
+                }
+            }
+
+            const hasAudioData =
+                frequencyData?.some((value) => value > 3) ?? false
 
             frameRef.current++
 
             for (let index = 0; index < BAR_COUNT; index++) {
                 let normalized = 0
 
-                if (hasAudioData) {
+                if (hasAudioData && frequencyData) {
                     const start = Math.floor(
                         Math.pow(index / BAR_COUNT, 2) *
                         frequencyData.length
@@ -205,6 +218,8 @@ export function RadioPlayer() {
 
                     normalized = (sum / (end - start)) / 255
                 } else {
+                    // Fallback animation for mobile browsers
+                    // where audio frequency data is unavailable.
                     const time = frameRef.current * 0.11
 
                     normalized =
@@ -302,7 +317,6 @@ export function RadioPlayer() {
                     setIsLoading(false)
                     stopVisualizer()
                 }}
-                onWaiting={() => setIsLoading(true)}
                 onPlaying={() => {
                     setIsPlaying(true)
                     setIsLoading(false)
@@ -370,12 +384,11 @@ export function RadioPlayer() {
                         <div className="radio-player-reflection" />
                         <div className="radio-player-glow" />
 
-                        {/* Mobile content */}
                         <div className="
                             relative flex flex-col items-center
                             gap-4 px-5 pb-5 pt-4
                         ">
-                            {/* Track title and artist */}
+                            {/* Track information */}
                             <div className="w-full min-w-0 text-center">
                                 <h3 className="
                                     radio-player-title
@@ -393,21 +406,24 @@ export function RadioPlayer() {
                                 </p>
                             </div>
 
-                            {/* Equalizer left, playback right */}
+                            {/* Equalizer and playback */}
                             <div className="flex w-full items-center gap-4">
                                 <div
                                     className="radio-equalizer min-w-0 flex-1"
                                     aria-label="Audio visualizer"
                                 >
-                                    {Array.from({ length: BAR_COUNT }, (_, index) => (
-                                        <div
-                                            key={index}
-                                            ref={(element) => {
-                                                mobileBarRefs.current[index] = element
-                                            }}
-                                            className="radio-equalizer-bar"
-                                        />
-                                    ))}
+                                    {Array.from(
+                                        { length: BAR_COUNT },
+                                        (_, index) => (
+                                            <div
+                                                key={index}
+                                                ref={(element) => {
+                                                    mobileBarRefs.current[index] = element
+                                                }}
+                                                className="radio-equalizer-bar"
+                                            />
+                                        )
+                                    )}
                                 </div>
 
                                 <button
