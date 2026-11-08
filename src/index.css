@@ -1,3 +1,4 @@
+
 @import url("/fonts/Lora/Fonts/WEB/css/lora.css");
 @import "tailwindcss";
 
@@ -54,18 +55,98 @@
 }
 
 @layer base {
-  * { @apply border-border; }
-  html, body, #root { min-height: 100%; }
-  body { @apply m-0 bg-background text-foreground antialiased; min-width: 320px; }
-  button { @apply cursor-pointer; }
-  :focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    @apply m-0 bg-background text-foreground antialiased;
+    min-width: 320px;
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
 }
 
-@keyframes live-progress {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(300%);
+/* =========================================
+   Cozy Radio - Audio Visualizer
+   ========================================= */
+
+.radio-equalizer {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+}
+
+.radio-equalizer-bar {
+  width: 3px;
+  height: 3px;
+  flex-shrink: 0;
+  border-radius: 1px;
+  background: #d6a16b;
+  opacity: 0.35;
+  transition:
+          height 850ms cubic-bezier(0.22, 1, 0.36, 1),
+          opacity 850ms ease;
+}
+
+/*
+ * While playing, JavaScript updates the actual
+ * bar heights from the audio frequency data.
+ * No CSS animation is used.
+ */
+
+/* =========================================
+   Volume Slider
+   ========================================= */
+
+.radio-volume-slider {
+  height: 4px;
+  appearance: none;
+  border-radius: 999px;
+  background: #68533e;
+  outline: none;
+}
+
+.radio-volume-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  background: #e8c895;
+  border: 1px solid #fff0d4;
+  cursor: pointer;
+}
+
+.radio-volume-slider::-moz-range-thumb {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: #e8c895;
+  border: 1px solid #fff0d4;
+  cursor: pointer;
+}
+
+/* =========================================
+   Reduced Motion
+   ========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .radio-equalizer-bar {
+    transition: none;
   }
 }
