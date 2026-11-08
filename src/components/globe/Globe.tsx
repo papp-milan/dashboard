@@ -1,20 +1,37 @@
 
-import { useMemo, useRef } from "react"
-import { Canvas, useFrame } from "@react-three/fiber"
+import { useEffect, useMemo, useRef } from "react"
+import { Canvas, useFrame, useThree } from "@react-three/fiber"
 import * as THREE from "three"
+
+import { Line2 } from "three/addons/lines/Line2.js"
+import { LineGeometry } from "three/addons/lines/LineGeometry.js"
+import { LineMaterial } from "three/addons/lines/LineMaterial.js"
 
 function GlobeModel() {
     const globeRef = useRef<THREE.Group>(null)
+    const { size } = useThree()
 
-    // Create longitude and latitude lines
-    const lines = useMemo(() => {
-        const result: THREE.LineLoop[] = []
-        const material = new THREE.LineBasicMaterial({
+    // Line material with adjustable pixel width
+    const material = useMemo(() => {
+        return new LineMaterial({
             color: "#ffffff",
             transparent: true,
             opacity: 1,
-            linewidth: 1,
+            linewidth: 2,
+            depthTest: true,
+            depthWrite: false,
+            resolution: new THREE.Vector2(size.width, size.height),
         })
+    }, [])
+
+    // Update resolution when canvas size changes
+    useEffect(() => {
+        material.resolution.set(size.width, size.height)
+    }, [material, size.width, size.height])
+
+    // Create longitude and latitude lines
+    const lines = useMemo(() => {
+        const result: Line2[] = []
 
         // Longitude lines
         for (let i = 0; i < 6; i++) {
@@ -33,8 +50,16 @@ function GlobeModel() {
                 )
             }
 
-            const geometry = new THREE.BufferGeometry().setFromPoints(points)
-            result.push(new THREE.LineLoop(geometry, material))
+            const positions = points.flatMap((point) => [
+                point.x,
+                point.y,
+                point.z,
+            ])
+
+            const geometry = new LineGeometry()
+            geometry.setPositions(positions)
+
+            result.push(new Line2(geometry, material))
         }
 
         // Latitude lines
@@ -42,6 +67,7 @@ function GlobeModel() {
             const latitude = (i * Math.PI) / 6
             const radius = Math.cos(latitude)
             const y = Math.sin(latitude)
+
             const points: THREE.Vector3[] = []
 
             for (let j = 0; j <= 100; j++) {
@@ -56,44 +82,71 @@ function GlobeModel() {
                 )
             }
 
-            const geometry = new THREE.BufferGeometry().setFromPoints(points)
-            result.push(new THREE.LineLoop(geometry, material))
+            const positions = points.flatMap((point) => [
+                point.x,
+                point.y,
+                point.z,
+            ])
+
+            const geometry = new LineGeometry()
+            geometry.setPositions(positions)
+
+            result.push(new Line2(geometry, material))
         }
 
         return result
-    }, [])
+    }, [material])
 
-    // Continuous horizontal rotation
+    // Continuous rotation around the globe's own axis
     useFrame((_, delta) => {
         if (globeRef.current) {
             globeRef.current.rotation.y += delta * 0.2
         }
     })
 
+    // Dispose geometries and material
+    useEffect(() => {
+        return () => {
+            lines.forEach((line) => line.geometry.dispose())
+            material.dispose()
+        }
+    }, [lines, material])
+
     return (
         <group rotation={[Math.PI / 6, 0, Math.PI / 6]}>
             <group ref={globeRef}>
-                {/* Invisible sphere */}
-                <mesh>
+
+                {/* Invisible sphere – hides the back-facing lines */}
+                <mesh renderOrder={-1}>
                     <sphereGeometry args={[1, 64, 64]} />
                     <meshBasicMaterial
-                        transparent
-                        opacity={0}
+                        color="black"
                         colorWrite={false}
-                        depthWrite
+                        depthWrite={true}
+                        depthTest={true}
+                        transparent={false}
                     />
                 </mesh>
 
                 {/* Globe lines */}
                 {lines.map((line, index) => (
-                    <primitive key={index} object={line} />
+                    <primitive
+                        key={index}
+                        object={line}
+                        renderOrder={1}
+                    />
                 ))}
 
                 {/* Outer border */}
-                <mesh>
+                <mesh renderOrder={1}>
                     <torusGeometry args={[1, 0.008, 8, 100]} />
-                    <meshBasicMaterial color="white" />
+                    <meshBasicMaterial
+                        color="white"
+                        depthTest={true}
+                        depthWrite={false}
+                    />
                 </mesh>
+
             </group>
         </group>
     )
@@ -104,7 +157,11 @@ export function Globe() {
         <div className="h-full w-full">
             <Canvas
                 camera={{ position: [0, 0, 3], fov: 45 }}
-                gl={{ alpha: true, antialias: true }}
+                gl={{
+                    alpha: true,
+                    antialias: true,
+                    depth: true,
+                }}
             >
                 <GlobeModel />
             </Canvas>
