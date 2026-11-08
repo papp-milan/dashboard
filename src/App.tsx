@@ -1,6 +1,7 @@
+
 import { Button } from "@/components/ui/button"
-import {Globe} from "@/components/globe/Globe.tsx";
-import {RadioPlayer} from "@/components/radio-player/RadioPlayer.tsx";
+import { Globe } from "@/components/globe/Globe.tsx"
+import { RadioPlayer } from "@/components/radio-player/RadioPlayer.tsx"
 
 export default function App() {
     return (
@@ -19,11 +20,12 @@ export default function App() {
                 href="https://pappmilan.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group absolute top-6 right-6 md:left-6 z-10 h-12 w-12 md:h-20 md:w-20"
+                className="group absolute top-6 right-6 z-10 h-12 w-12 md:left-6 md:h-20 md:w-20"
             >
                 <Globe />
             </a>
 
+            {/* GitHub */}
             <a
                 href="https://github.com/papp-milan/dashboard"
                 target="_blank"
@@ -42,12 +44,21 @@ export default function App() {
             {/* Foreground content */}
             <section className="relative z-10 flex flex-col items-center gap-6 text-center">
                 <div className="space-y-2">
-                    <h1 className="text-5xl font-semibold tracking-tight text-popover">
+                    <h1 className="text-5xl font-semibold tracking-tight text-[#F0E8DC]">
                         Life Is Peak
                     </h1>
                 </div>
 
-                <Button>Does nothing.</Button>
+                <Button
+                    className="
+                        border border-[#493E35]
+                        bg-[#211D1A]
+                        text-[#F0E8DC]
+                        hover:bg-[#2D2722]
+                    "
+                >
+                    Does nothing.
+                </Button>
             </section>
         </main>
     )

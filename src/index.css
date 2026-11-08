@@ -4,55 +4,105 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* =========================================
+   THEME - ESPRESSO & CREAM
+   Zentrale Farbverwaltung des Dashboards
+   ========================================= */
+
 :root {
-  color-scheme: light;
-  --background: #ffffff;
-  --foreground: #09090b;
-  --card: #ffffff;
-  --card-foreground: #09090b;
-  --popover: #ffffff;
-  --popover-foreground: #09090b;
-  --primary: #18181b;
-  --primary-foreground: #fafafa;
-  --secondary: #f4f4f5;
-  --secondary-foreground: #18181b;
-  --muted: #f4f4f5;
-  --muted-foreground: #71717a;
-  --accent: #f4f4f5;
-  --accent-foreground: #18181b;
-  --destructive: #aa0909;
-  --border: #e4e4e7;
-  --input: #e4e4e7;
-  --ring: #a1a1aa;
+  color-scheme: dark;
+
+  /* Base */
+  --background: #211D1A;
+  --foreground: #F0E8DC;
+
+  /* Surfaces */
+  --card: #2D2722;
+  --card-foreground: #F0E8DC;
+  --popover: #2D2722;
+  --popover-foreground: #F0E8DC;
+  --surface-elevated: #39312A;
+
+  /* Brand */
+  --primary: #D98250;
+  --primary-foreground: #211D1A;
+
+  /* Supporting colors */
+  --secondary: #39312A;
+  --secondary-foreground: #F0E8DC;
+  --muted: #39312A;
+  --muted-foreground: #B7A99A;
+  --accent: #39312A;
+  --accent-foreground: #F0E8DC;
+
+  /* Borders and controls */
+  --border: #493E35;
+  --input: #493E35;
+  --ring: #D98250;
+  --destructive: #C66B5D;
+
+  /* Additional palette colors */
+  --cream: #E8C49F;
+  --cream-light: #F0E8DC;
+  --cream-muted: #B7A99A;
+  --espresso: #211D1A;
+  --espresso-surface: #2D2722;
+  --espresso-elevated: #39312A;
+  --terracotta: #D98250;
+
+  /* Radius */
   --radius: 0.625rem;
 
+  /* Typography */
   font-family: Lora-Regular, serif;
 }
 
+/* Tailwind theme mapping */
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
+
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
+
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+
   --color-destructive: var(--destructive);
+
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  --color-cream: var(--cream);
+  --color-cream-light: var(--cream-light);
+  --color-cream-muted: var(--cream-muted);
+  --color-espresso: var(--espresso);
+  --color-espresso-surface: var(--espresso-surface);
+  --color-espresso-elevated: var(--espresso-elevated);
+  --color-terracotta: var(--terracotta);
+
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
+
+/* =========================================
+   Base
+   ========================================= */
 
 @layer base {
   * {
@@ -81,6 +131,111 @@
 }
 
 /* =========================================
+   Radio Player - Theme
+   Nutzt ausschließlich zentrale Theme-Farben
+   ========================================= */
+
+.radio-player-shell {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(240, 232, 220, 0.13);
+  background: rgba(45, 39, 34, 0.94);
+  box-shadow:
+          0 12px 45px rgba(0, 0, 0, 0.4),
+          inset 0 1px 0 rgba(240, 232, 220, 0.09);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.radio-player-reflection {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+          135deg,
+          rgba(240, 232, 220, 0.09),
+          transparent 55%,
+          rgba(217, 130, 80, 0.06)
+  );
+}
+
+.radio-player-glow {
+  pointer-events: none;
+  position: absolute;
+  left: -4rem;
+  top: -6rem;
+  height: 10rem;
+  width: 16rem;
+  border-radius: 9999px;
+  background: rgba(217, 130, 80, 0.08);
+  filter: blur(48px);
+}
+
+.radio-player-grabber {
+  border: 1px solid rgba(240, 232, 220, 0.13);
+  border-bottom: 0;
+  background: rgba(45, 39, 34, 0.96);
+}
+
+.radio-player-grabber-line {
+  background: rgba(232, 196, 159, 0.65);
+}
+
+.radio-player-title {
+  color: var(--cream-light);
+}
+
+.radio-player-artist {
+  color: var(--cream-muted);
+}
+
+.radio-player-mobile-button {
+  border: 1px solid rgba(232, 196, 159, 0.25);
+  background: var(--cream);
+  color: var(--espresso);
+  box-shadow: 0 0 20px rgba(232, 196, 159, 0.15);
+}
+
+.radio-player-desktop-button {
+  border: 1px solid rgba(217, 130, 80, 0.6);
+  background: rgba(217, 130, 80, 0.15);
+  color: var(--cream);
+}
+
+.radio-player-desktop-button:hover {
+  border-color: var(--primary);
+  background: rgba(217, 130, 80, 0.25);
+}
+
+.radio-player-control {
+  color: var(--cream-muted);
+  transition: color 200ms ease;
+}
+
+.radio-player-control:hover {
+  color: var(--cream);
+}
+
+.radio-player-divider {
+  border-color: rgba(240, 232, 220, 0.12);
+}
+
+.radio-player-footer {
+  border-color: rgba(240, 232, 220, 0.10);
+  color: var(--cream-muted);
+}
+
+.radio-player-footer-brand {
+  color: var(--cream);
+}
+
+.radio-player-error {
+  border-color: rgba(198, 107, 93, 0.2);
+  background: rgba(198, 107, 93, 0.08);
+  color: #E6A197;
+}
+
+/* =========================================
    Radio Player - Equalizer
    ========================================= */
 
@@ -99,7 +254,11 @@
   height: 3px;
   flex: 1 1 0;
   border-radius: 2px;
-  background: linear-gradient(to top, #b96c37, #e9a66d);
+  background: linear-gradient(
+          to top,
+          var(--primary),
+          var(--cream)
+  );
   opacity: 0.35;
 }
 
@@ -155,7 +314,7 @@
   appearance: none;
   -webkit-appearance: none;
   border-radius: 50%;
-  background: #e8c49f;
+  background: var(--cream);
   box-shadow: 0 0 8px rgba(232, 196, 159, 0.3);
 }
 
@@ -164,7 +323,7 @@
   height: 14px;
   border: none;
   border-radius: 50%;
-  background: #e8c49f;
+  background: var(--cream);
   box-shadow: 0 0 8px rgba(232, 196, 159, 0.3);
 }
 

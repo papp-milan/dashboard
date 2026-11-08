@@ -340,7 +340,7 @@ export function RadioPlayer() {
                     }
                     `}
                 >
-                    {/* Centered grabber - 20% width */}
+                    {/* Centered grabber */}
                     <div className="flex h-[30px] w-full justify-center">
                         <button
                             type="button"
@@ -352,42 +352,23 @@ export function RadioPlayer() {
                             }
                             aria-expanded={isMobileOpen}
                             className="
+                                radio-player-grabber
                                 flex h-[30px] w-1/5 min-w-[64px]
                                 items-center justify-center
                                 rounded-t-2xl
-                                border-x border-t border-white/[0.13]
-                                bg-[#211a16]/95
-                                backdrop-blur-2xl
                             "
                         >
                             <span className="
+                                radio-player-grabber-line
                                 h-1.5 w-12 max-w-[75%] rounded-full
-                                bg-[#E8C49F]/65
-                                shadow-[0_0_10px_rgba(232,196,159,0.15)]
                             " />
                         </button>
                     </div>
 
                     {/* Player */}
-                    <div className="
-                        relative overflow-hidden rounded-t-3xl
-                        border-x border-b border-white/[0.13]
-                        bg-[#211a16]/95
-                        shadow-[0_0_45px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.09)]
-                        backdrop-blur-2xl
-                    ">
-                        {/* Glass reflections */}
-                        <div className="
-                            pointer-events-none absolute inset-0
-                            bg-gradient-to-br from-white/[0.09]
-                            via-transparent to-[#D68A4D]/[0.06]
-                        " />
-
-                        <div className="
-                            pointer-events-none absolute -left-16 -top-24
-                            h-40 w-64 rounded-full
-                            bg-[#D68A4D]/[0.08] blur-3xl
-                        " />
+                    <div className="radio-player-shell rounded-t-3xl border-b">
+                        <div className="radio-player-reflection" />
+                        <div className="radio-player-glow" />
 
                         {/* Mobile content */}
                         <div className="
@@ -397,15 +378,16 @@ export function RadioPlayer() {
                             {/* Track title and artist */}
                             <div className="w-full min-w-0 text-center">
                                 <h3 className="
+                                    radio-player-title
                                     truncate font-serif text-lg font-medium
-                                    tracking-wide text-[#F4E5D2]
+                                    tracking-wide
                                 ">
                                     {track.title}
                                 </h3>
 
                                 <p className="
+                                    radio-player-artist
                                     mt-1 truncate text-xs tracking-wide
-                                    text-[#BBA995]
                                 ">
                                     {track.artist}
                                 </p>
@@ -434,12 +416,10 @@ export function RadioPlayer() {
                                     disabled={isLoading}
                                     aria-label={isPlaying ? "Pause" : "Play"}
                                     className="
+                                        radio-player-mobile-button
                                         flex h-12 w-12 shrink-0
                                         items-center justify-center
-                                        rounded-full border
-                                        border-[#E8C49F]/25
-                                        bg-[#E8C49F] text-[#211a16]
-                                        shadow-[0_0_20px_rgba(232,196,159,0.15)]
+                                        rounded-full
                                         transition-transform
                                         hover:scale-105 active:scale-95
                                         disabled:opacity-50
@@ -448,8 +428,8 @@ export function RadioPlayer() {
                                     {isLoading ? (
                                         <span className="
                                             h-5 w-5 animate-spin rounded-full
-                                            border-2 border-[#211a16]/30
-                                            border-t-[#211a16]
+                                            border-2 border-current/30
+                                            border-t-current
                                         " />
                                     ) : isPlaying ? (
                                         <Pause className="h-5 w-5 fill-current" />
@@ -462,10 +442,10 @@ export function RadioPlayer() {
                             {/* Error */}
                             {error && (
                                 <div className="
-                                    w-full border-t border-red-300/15
-                                    bg-red-950/20 px-2 py-2
+                                    radio-player-error
+                                    w-full border-t px-2 py-2
                                 ">
-                                    <p className="text-center text-xs text-red-300">
+                                    <p className="text-center text-xs">
                                         {error}
                                     </p>
                                 </div>
@@ -473,9 +453,9 @@ export function RadioPlayer() {
 
                             {/* Footer */}
                             <div className="
+                                radio-player-footer
                                 flex w-full items-center justify-center
-                                border-t border-white/[0.10]
-                                pt-3
+                                border-t pt-3
                             ">
                                 <a
                                     href="https://somafm.com/groovesalad/"
@@ -485,21 +465,20 @@ export function RadioPlayer() {
                                 >
                                     <span className="
                                         font-sans text-[8px] font-medium
-                                        tracking-[0.2em] text-[#BBA995]/65
+                                        tracking-[0.2em] opacity-65
                                     ">
                                         POWERED BY
                                     </span>
 
                                     <span className="
+                                        radio-player-footer-brand
                                         font-serif text-[11px]
-                                        tracking-[0.18em] text-[#E8C49F]
+                                        tracking-[0.18em]
                                     ">
                                         SOMAFM
                                     </span>
 
-                                    <ExternalLink className="
-                                        h-2.5 w-2.5 text-[#BBA995]/60
-                                    " />
+                                    <ExternalLink className="h-2.5 w-2.5 opacity-60" />
                                 </a>
                             </div>
                         </div>
@@ -513,24 +492,9 @@ export function RadioPlayer() {
                 w-[min(96vw,780px)] -translate-x-1/2
                 sm:block
             ">
-                <div className="
-                    relative overflow-hidden rounded-2xl
-                    border border-white/[0.13]
-                    bg-[#211a16]/85
-                    shadow-[0_12px_45px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.09)]
-                    backdrop-blur-2xl
-                ">
-                    <div className="
-                        pointer-events-none absolute inset-0
-                        bg-gradient-to-br from-white/[0.09]
-                        via-transparent to-[#D68A4D]/[0.06]
-                    " />
-
-                    <div className="
-                        pointer-events-none absolute -left-16 -top-24
-                        h-40 w-64 rounded-full
-                        bg-[#D68A4D]/[0.08] blur-3xl
-                    " />
+                <div className="radio-player-shell rounded-2xl">
+                    <div className="radio-player-reflection" />
+                    <div className="radio-player-glow" />
 
                     <div className="
                         relative flex flex-row items-center gap-5 px-6 py-4
@@ -538,15 +502,16 @@ export function RadioPlayer() {
                         {/* Track information */}
                         <div className="min-w-0 flex-[1.15]">
                             <h3 className="
+                                radio-player-title
                                 truncate font-serif text-lg font-medium
-                                tracking-wide text-[#F4E5D2]
+                                tracking-wide
                             ">
                                 {track.title}
                             </h3>
 
                             <p className="
+                                radio-player-artist
                                 mt-1 truncate text-xs tracking-wide
-                                text-[#BBA995]
                             ">
                                 {track.artist}
                             </p>
@@ -563,8 +528,7 @@ export function RadioPlayer() {
                                     <div
                                         key={index}
                                         ref={(element) => {
-                                            desktopBarRefs.current[index] =
-                                                element
+                                            desktopBarRefs.current[index] = element
                                         }}
                                         className="radio-equalizer-bar"
                                     />
@@ -579,21 +543,18 @@ export function RadioPlayer() {
                             disabled={isLoading}
                             aria-label={isPlaying ? "Pause" : "Play"}
                             className="
+                                radio-player-desktop-button
                                 flex h-11 w-11 shrink-0 items-center
                                 justify-center rounded-full
-                                border border-[#E8B47F]/60
-                                bg-[#D99A61]/15 text-[#F2C69A]
                                 transition-all duration-300
-                                hover:border-[#F1BD88]
-                                hover:bg-[#D99A61]/25
                                 active:scale-95 disabled:opacity-50
                             "
                         >
                             {isLoading ? (
                                 <span className="
                                     h-4 w-4 animate-spin rounded-full
-                                    border-2 border-[#E8B47F]/30
-                                    border-t-[#F2C69A]
+                                    border-2 border-current/30
+                                    border-t-current
                                 " />
                             ) : isPlaying ? (
                                 <Pause className="h-4 w-4 fill-current" />
@@ -604,8 +565,9 @@ export function RadioPlayer() {
 
                         {/* Volume */}
                         <div className="
+                            radio-player-divider
                             flex shrink-0 items-center gap-2
-                            border-l border-white/[0.12] pl-4
+                            border-l pl-4
                         ">
                             <button
                                 type="button"
@@ -614,9 +576,8 @@ export function RadioPlayer() {
                                 }
                                 aria-label={volume === 0 ? "Unmute" : "Mute"}
                                 className="
+                                    radio-player-control
                                     flex h-10 w-9 items-center justify-center
-                                    text-[#BBA995] transition
-                                    hover:text-[#F2C69A]
                                 "
                             >
                                 {volume === 0 ? (
@@ -657,9 +618,9 @@ export function RadioPlayer() {
                             rel="noopener noreferrer"
                             aria-label="Open SomaFM Groove Salad"
                             className="
-                                border-l border-white/[0.12]
-                                pl-4 text-[#BBA995]
-                                transition hover:text-[#F2C69A]
+                                radio-player-divider
+                                border-l pl-4
+                                radio-player-control
                             "
                         >
                             <ExternalLink className="h-4 w-4" />
@@ -668,9 +629,9 @@ export function RadioPlayer() {
 
                     {/* Footer */}
                     <div className="
+                        radio-player-footer
                         relative flex items-center justify-center
-                        border-t border-white/[0.10]
-                        bg-black/[0.08] px-4 py-2
+                        border-t bg-black/[0.08] px-4 py-2
                     ">
                         <a
                             href="https://somafm.com/groovesalad/"
@@ -680,21 +641,19 @@ export function RadioPlayer() {
                         >
                             <span className="
                                 text-[10px] font-medium
-                                tracking-[0.2em] text-[#BBA995]/65
+                                tracking-[0.2em] opacity-65
                             ">
                                 Powered by
                             </span>
 
                             <span className="
+                                radio-player-footer-brand
                                 text-[12px] tracking-[0.18em]
-                                text-[#E8C49F]
                             ">
                                 SomaFM
                             </span>
 
-                            <ExternalLink className="
-                                h-2.5 w-2.5 text-[#BBA995]/60
-                            " />
+                            <ExternalLink className="h-2.5 w-2.5 opacity-60" />
                         </a>
                     </div>
                 </div>
