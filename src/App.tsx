@@ -12,6 +12,13 @@ export default function App() {
                 }}
             />
 
+            {/* Top left logo */}
+            <img
+                src="/logos/globe-white.svg"
+                alt="Globe logo"
+                className="absolute left-6 top-6 z-10 h-8 w-8 md:h-12 md:w-12"
+            />
+
             {/* Foreground content */}
             <section className="relative z-10 flex flex-col items-center gap-6 text-center">
                 <div className="space-y-2">
