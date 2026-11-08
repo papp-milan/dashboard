@@ -38,7 +38,6 @@ function getTrack(data: unknown): Track | null {
 
 export function RadioPlayer() {
     const audioRef = useRef<HTMLAudioElement>(null)
-
     const audioContextRef = useRef<AudioContext | null>(null)
     const analyserRef = useRef<AnalyserNode | null>(null)
     const sourceRef = useRef<MediaElementAudioSourceNode | null>(null)
@@ -121,40 +120,50 @@ export function RadioPlayer() {
         }
     }
 
-    // Stop visualizer updates.
-    // The last inline heights remain in place so CSS can animate
-    // every bar simultaneously back to its resting height.
+    // Stop visualizer and smoothly return all bars to rest.
     const stopVisualizer = useCallback(() => {
         if (animationFrameRef.current !== null) {
             cancelAnimationFrame(animationFrameRef.current)
             animationFrameRef.current = null
         }
 
-        // Aktuelle Höhen fixieren, damit der Übergang weich startet.
         barRefs.current.forEach((bar) => {
             if (!bar) return
+
+            bar.style.transition =
+                "height 850ms cubic-bezier(0.22, 1, 0.36, 1), opacity 850ms ease"
+
             bar.style.height = getComputedStyle(bar).height
         })
 
-        // Alle Balken gleichzeitig auf die Grundlinie zurückführen.
         requestAnimationFrame(() => {
             barRefs.current.forEach((bar) => {
                 if (!bar) return
+
                 bar.style.height = "3px"
                 bar.style.opacity = "0.35"
             })
         })
     }, [])
 
-    // Read actual audio frequencies and update the bars.
+    // Read actual audio frequencies and update bars.
     const startVisualizer = useCallback(() => {
         const analyser = analyserRef.current
 
         if (!analyser) return
 
-        stopVisualizer()
+        if (animationFrameRef.current !== null) {
+            cancelAnimationFrame(animationFrameRef.current)
+            animationFrameRef.current = null
+        }
 
         const frequencyData = new Uint8Array(analyser.frequencyBinCount)
+
+        barRefs.current.forEach((bar) => {
+            if (!bar) return
+
+            bar.style.transition = "height 80ms linear, opacity 80ms linear"
+        })
 
         const update = () => {
             analyser.getByteFrequencyData(frequencyData)
@@ -164,8 +173,7 @@ export function RadioPlayer() {
 
                 if (!bar) continue
 
-                // Logarithmic frequency distribution:
-                // more detail in bass and mid frequencies.
+                // Logarithmic frequency distribution
                 const start = Math.floor(
                     Math.pow(index / BAR_COUNT, 2) *
                     frequencyData.length
@@ -186,8 +194,6 @@ export function RadioPlayer() {
                 }
 
                 const average = sum / (end - start)
-
-                // Convert frequency intensity into bar height.
                 const normalized = average / 255
                 const height = 3 + Math.pow(normalized, 1.15) * 34
 
@@ -199,7 +205,7 @@ export function RadioPlayer() {
         }
 
         update()
-    }, [stopVisualizer])
+    }, [])
 
     // Playback
     const togglePlayback = async () => {
@@ -233,6 +239,7 @@ export function RadioPlayer() {
         }
     }
 
+    // Volume
     const handleVolumeChange = (value: number) => {
         setVolume(value)
 
@@ -241,19 +248,21 @@ export function RadioPlayer() {
         }
     }
 
-    // Clean up animation and audio context.
+    // Clean up animation and audio context
     useEffect(() => {
         return () => {
-            stopVisualizer()
+            if (animationFrameRef.current !== null) {
+                cancelAnimationFrame(animationFrameRef.current)
+            }
 
             if (audioContextRef.current) {
                 void audioContextRef.current.close()
             }
         }
-    }, [stopVisualizer])
+    }, [])
 
     return (
-        <div className="fixed bottom-5 left-1/2 z-50 w-[min(94vw,620px)] -translate-x-1/2">
+        <div className="fixed bottom-5 left-1/2 z-50 w-[min(96vw,780px)] -translate-x-1/2">
 
             <audio
                 ref={audioRef}
@@ -295,100 +304,204 @@ export function RadioPlayer() {
                 }}
             />
 
-            <div className="overflow-hidden rounded-lg border border-[#967452]/50 bg-[#30271F]/95 shadow-[0_8px_35px_rgba(0,0,0,0.4)] backdrop-blur-xl">
+            {/* Soft Glass Player */}
+            <div className="
+                relative overflow-hidden rounded-2xl
+                border border-white/[0.13]
+                bg-[#211a16]/65
+                shadow-[0_12px_45px_rgba(0,0,0,0.32),inset_0_1px_0_rgba(255,255,255,0.09)]
+                backdrop-blur-2xl
+            ">
 
-                {/* Main player */}
-                <div className="flex items-center gap-4 px-4 py-4 sm:px-5">
+                {/* Glass reflections */}
+                <div className="
+                    pointer-events-none absolute inset-0
+                    bg-gradient-to-br from-white/[0.09]
+                    via-transparent to-[#D68A4D]/[0.06]
+                " />
 
-                    {/* Track */}
-                    <div className="min-w-0 flex-1">
-                        <h3 className="truncate font-serif text-lg font-semibold text-[#F4E5C9]">
+                <div className="
+                    pointer-events-none absolute -left-16 -top-24
+                    h-40 w-64 rounded-full
+                    bg-[#D68A4D]/[0.08] blur-3xl
+                " />
+
+                {/* Main content */}
+                <div className="
+                    relative flex flex-col gap-4
+                    p-4 sm:flex-row sm:items-center sm:gap-5 sm:px-6
+                ">
+
+                    {/* Track information */}
+                    <div className="min-w-0 sm:flex-[1.15]">
+                        <h3 className="
+                            truncate font-serif text-lg font-medium
+                            tracking-wide text-[#F4E5D2]
+                        ">
                             {track.title}
                         </h3>
 
-                        <p className="mt-0.5 truncate text-xs text-[#BBA68A]">
+                        <p className="
+                            mt-1 truncate text-xs tracking-wide
+                            text-[#BBA995]
+                        ">
                             {track.artist}
                         </p>
                     </div>
 
-                    {/* Real audio visualizer */}
-                    <div className="radio-equalizer" aria-label="Audio visualizer">
-                        {Array.from({ length: BAR_COUNT }, (_, index) => (
-                            <div
-                                key={index}
-                                ref={(element) => {
-                                    barRefs.current[index] = element
-                                }}
-                                className="radio-equalizer-bar"
-                            />
-                        ))}
-                    </div>
+                    {/* Controls */}
+                    <div className="
+                        flex min-w-0 items-center justify-between gap-3
+                        sm:contents
+                    ">
 
-                    {/* Playback */}
-                    <button
-                        type="button"
-                        onClick={togglePlayback}
-                        disabled={isLoading}
-                        aria-label={isPlaying ? "Pause" : "Play"}
-                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-[#E8C895] text-[#35291F] shadow-[0_3px_0_#98744D] transition hover:bg-[#F4DDB4] active:translate-y-[2px] active:shadow-none disabled:opacity-60"
-                    >
-                        {isLoading ? (
-                            <span className="h-4 w-4 animate-spin rounded-full border-2 border-[#6C5035]/30 border-t-[#6C5035]" />
-                        ) : isPlaying ? (
-                            <Pause className="h-4 w-4 fill-current" />
-                        ) : (
-                            <Play className="ml-0.5 h-4 w-4 fill-current" />
-                        )}
-                    </button>
+                        {/* Equalizer */}
+                        <div
+                            className="radio-equalizer flex flex-1 sm:flex-initial"
+                            aria-label="Audio visualizer"
+                        >
+                            {Array.from({ length: BAR_COUNT }, (_, index) => (
+                                <div
+                                    key={index}
+                                    ref={(element) => {
+                                        barRefs.current[index] = element
+                                    }}
+                                    className="radio-equalizer-bar"
+                                />
+                            ))}
+                        </div>
 
-                    {/* Volume */}
-                    <div className="flex shrink-0 items-center gap-2">
+                        {/* Play / Pause */}
                         <button
                             type="button"
-                            onClick={() =>
-                                handleVolumeChange(volume === 0 ? 65 : 0)
-                            }
-                            aria-label={volume === 0 ? "Unmute" : "Mute"}
-                            className="text-[#C6AF8D] transition hover:text-[#F0D6AC]"
+                            onClick={togglePlayback}
+                            disabled={isLoading}
+                            aria-label={isPlaying ? "Pause" : "Play"}
+                            className="
+                                flex h-11 w-11 shrink-0 items-center
+                                justify-center rounded-full
+                                border border-[#E8B47F]/60
+                                bg-[#D99A61]/15 text-[#F2C69A]
+                                shadow-[0_0_18px_rgba(217,154,97,0.08)]
+                                transition-all duration-300
+                                hover:border-[#F1BD88]
+                                hover:bg-[#D99A61]/25
+                                hover:shadow-[0_0_22px_rgba(217,154,97,0.2)]
+                                active:scale-95 disabled:opacity-50
+                            "
                         >
-                            {volume === 0 ? (
-                                <VolumeX className="h-4 w-4" />
+                            {isLoading ? (
+                                <span className="
+                                    h-4 w-4 animate-spin rounded-full
+                                    border-2 border-[#E8B47F]/30
+                                    border-t-[#F2C69A]
+                                " />
+                            ) : isPlaying ? (
+                                <Pause className="h-4 w-4 fill-current" />
                             ) : (
-                                <Volume2 className="h-4 w-4" />
+                                <Play className="ml-0.5 h-4 w-4 fill-current" />
                             )}
                         </button>
 
-                        <input
-                            type="range"
-                            min="0"
-                            max="100"
-                            value={volume}
-                            onChange={(event) =>
-                                handleVolumeChange(Number(event.target.value))
-                            }
-                            aria-label="Volume"
-                            className="radio-volume-slider w-14 cursor-pointer sm:w-20"
-                        />
+                        {/* Volume */}
+                        <div className="
+                            flex shrink-0 items-center gap-2
+                            border-l border-white/[0.12] pl-3
+                            sm:pl-4
+                        ">
+                            <button
+                                type="button"
+                                onClick={() =>
+                                    handleVolumeChange(volume === 0 ? 65 : 0)
+                                }
+                                aria-label={volume === 0 ? "Unmute" : "Mute"}
+                                className="
+                                    text-[#BBA995] transition
+                                    hover:text-[#F2C69A]
+                                "
+                            >
+                                {volume === 0 ? (
+                                    <VolumeX className="h-4 w-4" />
+                                ) : (
+                                    <Volume2 className="h-4 w-4" />
+                                )}
+                            </button>
+
+                            <input
+                                type="range"
+                                min="0"
+                                max="100"
+                                value={volume}
+                                onChange={(event) =>
+                                    handleVolumeChange(Number(event.target.value))
+                                }
+                                aria-label="Volume"
+                                className="radio-volume-slider w-14 cursor-pointer sm:w-16"
+                            />
+                        </div>
+
+                        {/* External link - desktop only */}
+                        <a
+                            href="https://somafm.com/groovesalad/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="Open SomaFM Groove Salad"
+                            className="
+                                hidden border-l border-white/[0.12]
+                                pl-4 text-[#BBA995]
+                                transition hover:text-[#F2C69A]
+                                sm:block
+                            "
+                        >
+                            <ExternalLink className="h-4 w-4" />
+                        </a>
                     </div>
                 </div>
 
                 {/* Error */}
                 {error && (
-                    <div className="border-t border-red-400/20 px-4 py-2">
-                        <p className="text-xs text-red-300">{error}</p>
+                    <div className="
+                        relative border-t border-red-300/15
+                        bg-red-950/20 px-5 py-2
+                    ">
+                        <p className="text-xs text-red-300">
+                            {error}
+                        </p>
                     </div>
                 )}
 
-                {/* Footer */}
-                <div className="flex items-center justify-center border-t border-[#80674D]/30 px-4 py-2">
+                {/* Always-bottom SomaFM branding */}
+                <div className="
+                    relative flex items-center justify-center
+                    border-t border-white/[0.10]
+                    bg-black/[0.08] px-4 py-2
+                ">
                     <a
                         href="https://somafm.com/groovesalad/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 font-mono text-[9px] tracking-wider text-[#A99476] transition hover:text-[#E8C895]"
+                        className="
+                            flex items-center gap-2
+                            transition-opacity hover:opacity-100
+                        "
                     >
-                        POWERED BY SOMAFM
-                        <ExternalLink className="h-2.5 w-2.5" />
+                        <span className="
+                            font-sans text-[8px] font-medium
+                            tracking-[0.2em] text-[#BBA995]/65
+                        ">
+                            Powered by
+                        </span>
+
+                        <span className="
+                            font-serif text-[11px] tracking-[0.18em]
+                            text-[#E8C49F]
+                        ">
+                            SomaFM
+                        </span>
+
+                        <ExternalLink className="
+                            h-2.5 w-2.5 text-[#BBA995]/60
+                        " />
                     </a>
                 </div>
             </div>
