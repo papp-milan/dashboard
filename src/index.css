@@ -81,14 +81,13 @@
 }
 
 /* =========================================
-   Radio Player
+   Radio Player - Equalizer
    ========================================= */
 
 .radio-equalizer {
   display: flex;
   height: 40px;
   min-width: 0;
-  max-width: 180px;
   align-items: center;
   justify-content: space-between;
   gap: 2px;
@@ -98,11 +97,33 @@
   width: 3px;
   min-width: 2px;
   height: 3px;
-  flex: 1;
+  flex: 1 1 0;
   border-radius: 2px;
   background: linear-gradient(to top, #b96c37, #e9a66d);
   opacity: 0.35;
 }
+
+/* Mobile: Equalizer fills available space */
+@media (max-width: 639px) {
+  .radio-equalizer {
+    width: 100%;
+    max-width: none;
+    flex: 1 1 0%;
+  }
+}
+
+/* Desktop: Equalizer has a fixed width */
+@media (min-width: 640px) {
+  .radio-equalizer {
+    width: 120px;
+    max-width: 120px;
+    flex: 0 0 120px;
+  }
+}
+
+/* =========================================
+   Radio Player - Volume Slider
+   ========================================= */
 
 .radio-volume-slider {
   display: block;
