@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button"
+import {Globe} from "@/components/globe/Globe.tsx";
 
 export default function App() {
     return (
@@ -13,11 +14,33 @@ export default function App() {
             />
 
             {/* Top left logo */}
-            <img
-                src="/logos/globe-white.svg"
-                alt="Globe logo"
-                className="absolute left-6 top-6 z-10 h-8 w-8 md:h-12 md:w-12"
-            />
+            {/*<img*/}
+            {/*    src="/icons/globe/globe-white.svg"*/}
+            {/*    alt="Globe logo"*/}
+            {/*    className="absolute left-6 top-6 z-10 h-8 w-8 md:h-12 md:w-12"*/}
+            {/*/>*/}
+
+            <a
+                href="https://pappmilan.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group absolute left-6 top-6 z-10 h-12 w-12 md:h-20 md:w-20"
+            >
+                <Globe />
+            </a>
+
+            <a
+                href="https://github.com/papp-milan/dashboard"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group absolute bottom-6 left-6 z-10 h-8 w-8 md:h-12 md:w-12"
+            >
+                <img
+                    src="/icons/github/github-white.svg"
+                    alt="GitHub logo"
+                    className="h-full w-full"
+                />
+            </a>
 
             {/* Foreground content */}
             <section className="relative z-10 flex flex-col items-center gap-6 text-center">
