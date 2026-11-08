@@ -14,17 +14,11 @@ export default function App() {
             />
 
             {/* Top left logo */}
-            {/*<img*/}
-            {/*    src="/icons/globe/globe-white.svg"*/}
-            {/*    alt="Globe logo"*/}
-            {/*    className="absolute left-6 top-6 z-10 h-8 w-8 md:h-12 md:w-12"*/}
-            {/*/>*/}
-
             <a
                 href="https://pappmilan.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group absolute left-6 top-6 z-10 h-12 w-12 md:h-20 md:w-20"
+                className="group absolute right-6 md:left-6 top-6 z-10 h-12 w-12 md:h-20 md:w-20"
             >
                 <Globe />
             </a>
