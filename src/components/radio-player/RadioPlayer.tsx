@@ -6,6 +6,8 @@ import {
     Volume2,
     VolumeX,
     ExternalLink,
+    Radio,
+    ChevronDown,
 } from "lucide-react"
 
 const STREAM_URL = "https://ice1.somafm.com/groovesalad-128-mp3"
@@ -41,12 +43,12 @@ export function RadioPlayer() {
     const audioContextRef = useRef<AudioContext | null>(null)
     const analyserRef = useRef<AnalyserNode | null>(null)
     const sourceRef = useRef<MediaElementAudioSourceNode | null>(null)
-
     const animationFrameRef = useRef<number | null>(null)
     const barRefs = useRef<(HTMLDivElement | null)[]>([])
 
     const [isPlaying, setIsPlaying] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [isMobileOpen, setIsMobileOpen] = useState(false)
     const [volume, setVolume] = useState(25)
     const [error, setError] = useState<string | null>(null)
 
@@ -161,7 +163,6 @@ export function RadioPlayer() {
 
         barRefs.current.forEach((bar) => {
             if (!bar) return
-
             bar.style.transition = "height 80ms linear, opacity 80ms linear"
         })
 
@@ -173,7 +174,6 @@ export function RadioPlayer() {
 
                 if (!bar) continue
 
-                // Logarithmic frequency distribution
                 const start = Math.floor(
                     Math.pow(index / BAR_COUNT, 2) *
                     frequencyData.length
@@ -248,7 +248,7 @@ export function RadioPlayer() {
         }
     }
 
-    // Clean up animation and audio context
+    // Clean up
     useEffect(() => {
         return () => {
             if (animationFrameRef.current !== null) {
@@ -262,7 +262,11 @@ export function RadioPlayer() {
     }, [])
 
     return (
-        <div className="fixed bottom-5 left-1/2 z-50 w-[min(96vw,780px)] -translate-x-1/2">
+        <div className="
+            fixed bottom-5 right-5 z-50
+            sm:bottom-5 sm:left-1/2 sm:right-auto
+            sm:w-[min(96vw,780px)] sm:-translate-x-1/2
+        ">
 
             <audio
                 ref={audioRef}
@@ -304,205 +308,267 @@ export function RadioPlayer() {
                 }}
             />
 
-            {/* Soft Glass Player */}
-            <div className="
-                relative overflow-hidden rounded-2xl
-                border border-white/[0.13]
-                bg-[#211a16]/65
-                shadow-[0_12px_45px_rgba(0,0,0,0.32),inset_0_1px_0_rgba(255,255,255,0.09)]
-                backdrop-blur-2xl
-            ">
+            {/* Mobile launcher */}
+            <button
+                type="button"
+                onClick={() => setIsMobileOpen(true)}
+                aria-label="Radio-Player öffnen"
+                className={`
+                    ${isMobileOpen ? "hidden" : "flex"}
+                    sm:hidden
+                    h-14 w-14 items-center justify-center
+                    rounded-full border border-[#E8B47F]/40
+                    bg-[#211a16]/85 text-[#E8B47F]
+                    shadow-[0_8px_30px_rgba(0,0,0,0.4),0_0_20px_rgba(217,154,97,0.12)]
+                    backdrop-blur-2xl
+                    transition-all duration-300
+                    hover:bg-[#30241D]
+                    active:scale-95
+                `}
+            >
+                <span className="relative">
+                    <Radio className="h-6 w-6" />
+                    {isPlaying && (
+                        <span className="
+                            absolute -right-1 -top-1
+                            h-2.5 w-2.5 rounded-full
+                            border-2 border-[#211a16]
+                            bg-[#E69A56]
+                            shadow-[0_0_8px_rgba(230,154,86,0.8)]
+                        " />
+                    )}
+                </span>
+            </button>
 
-                {/* Glass reflections */}
-                <div className="
-                    pointer-events-none absolute inset-0
-                    bg-gradient-to-br from-white/[0.09]
-                    via-transparent to-[#D68A4D]/[0.06]
-                " />
+            {/* Player panel: always visible on desktop, toggle on mobile */}
+            <div className={`
+                ${isMobileOpen ? "block" : "hidden"}
+                sm:block
+                w-[min(92vw,360px)]
+                sm:w-full
+            `}>
 
+                {/* Soft Glass Player */}
                 <div className="
-                    pointer-events-none absolute -left-16 -top-24
-                    h-40 w-64 rounded-full
-                    bg-[#D68A4D]/[0.08] blur-3xl
-                " />
-
-                {/* Main content */}
-                <div className="
-                    relative flex flex-col gap-4
-                    p-4 sm:flex-row sm:items-center sm:gap-5 sm:px-6
+                    relative overflow-hidden rounded-2xl
+                    border border-white/[0.13]
+                    bg-[#211a16]/75
+                    shadow-[0_12px_45px_rgba(0,0,0,0.4),inset_0_1px_0_rgba(255,255,255,0.09)]
+                    backdrop-blur-2xl
                 ">
 
-                    {/* Track information */}
-                    <div className="min-w-0 sm:flex-[1.15]">
-                        <h3 className="
-                            truncate font-serif text-lg font-medium
-                            tracking-wide text-[#F4E5D2]
-                        ">
-                            {track.title}
-                        </h3>
-
-                        <p className="
-                            mt-1 truncate text-xs tracking-wide
-                            text-[#BBA995]
-                        ">
-                            {track.artist}
-                        </p>
-                    </div>
-
-                    {/* Controls */}
+                    {/* Glass reflections */}
                     <div className="
-                        flex min-w-0 items-center justify-between gap-3
-                        sm:contents
+                        pointer-events-none absolute inset-0
+                        bg-gradient-to-br from-white/[0.09]
+                        via-transparent to-[#D68A4D]/[0.06]
+                    " />
+
+                    <div className="
+                        pointer-events-none absolute -left-16 -top-24
+                        h-40 w-64 rounded-full
+                        bg-[#D68A4D]/[0.08] blur-3xl
+                    " />
+
+                    {/* Main content */}
+                    <div className="
+                        relative flex flex-col gap-4
+                        p-4 sm:flex-row sm:items-center sm:gap-5 sm:px-6
                     ">
 
-                        {/* Equalizer */}
-                        <div
-                            className="radio-equalizer flex flex-1 sm:flex-initial"
-                            aria-label="Audio visualizer"
-                        >
-                            {Array.from({ length: BAR_COUNT }, (_, index) => (
-                                <div
-                                    key={index}
-                                    ref={(element) => {
-                                        barRefs.current[index] = element
-                                    }}
-                                    className="radio-equalizer-bar"
-                                />
-                            ))}
-                        </div>
+                        {/* Track information */}
+                        <div className="flex min-w-0 items-start justify-between gap-3 sm:flex-[1.15]">
+                            <div className="min-w-0">
+                                <h3 className="
+                                    truncate font-serif text-lg font-medium
+                                    tracking-wide text-[#F4E5D2]
+                                ">
+                                    {track.title}
+                                </h3>
 
-                        {/* Play / Pause */}
-                        <button
-                            type="button"
-                            onClick={togglePlayback}
-                            disabled={isLoading}
-                            aria-label={isPlaying ? "Pause" : "Play"}
-                            className="
-                                flex h-11 w-11 shrink-0 items-center
-                                justify-center rounded-full
-                                border border-[#E8B47F]/60
-                                bg-[#D99A61]/15 text-[#F2C69A]
-                                shadow-[0_0_18px_rgba(217,154,97,0.08)]
-                                transition-all duration-300
-                                hover:border-[#F1BD88]
-                                hover:bg-[#D99A61]/25
-                                hover:shadow-[0_0_22px_rgba(217,154,97,0.2)]
-                                active:scale-95 disabled:opacity-50
-                            "
-                        >
-                            {isLoading ? (
-                                <span className="
-                                    h-4 w-4 animate-spin rounded-full
-                                    border-2 border-[#E8B47F]/30
-                                    border-t-[#F2C69A]
-                                " />
-                            ) : isPlaying ? (
-                                <Pause className="h-4 w-4 fill-current" />
-                            ) : (
-                                <Play className="ml-0.5 h-4 w-4 fill-current" />
-                            )}
-                        </button>
+                                <p className="
+                                    mt-1 truncate text-xs tracking-wide
+                                    text-[#BBA995]
+                                ">
+                                    {track.artist}
+                                </p>
+                            </div>
 
-                        {/* Volume */}
-                        <div className="
-                            flex shrink-0 items-center gap-2
-                            border-l border-white/[0.12] pl-3
-                            sm:pl-4
-                        ">
+                            {/* Mobile minimize button */}
                             <button
                                 type="button"
-                                onClick={() =>
-                                    handleVolumeChange(volume === 0 ? 65 : 0)
-                                }
-                                aria-label={volume === 0 ? "Unmute" : "Mute"}
+                                onClick={() => setIsMobileOpen(false)}
+                                aria-label="Radio-Player minimieren"
                                 className="
-                                    text-[#BBA995] transition
+                                    -mr-1 -mt-1 flex h-8 w-8 shrink-0
+                                    items-center justify-center
+                                    rounded-full text-[#BBA995]
+                                    transition hover:bg-white/10
                                     hover:text-[#F2C69A]
+                                    sm:hidden
                                 "
                             >
-                                {volume === 0 ? (
-                                    <VolumeX className="h-4 w-4" />
+                                <ChevronDown className="h-5 w-5" />
+                            </button>
+                        </div>
+
+                        {/* Controls */}
+                        <div className="
+                            flex min-w-0 items-center justify-between gap-3
+                            sm:contents
+                        ">
+
+                            {/* Equalizer */}
+                            <div
+                                className="radio-equalizer flex flex-1 sm:flex-initial"
+                                aria-label="Audio visualizer"
+                            >
+                                {Array.from({ length: BAR_COUNT }, (_, index) => (
+                                    <div
+                                        key={index}
+                                        ref={(element) => {
+                                            barRefs.current[index] = element
+                                        }}
+                                        className="radio-equalizer-bar"
+                                    />
+                                ))}
+                            </div>
+
+                            {/* Play / Pause */}
+                            <button
+                                type="button"
+                                onClick={togglePlayback}
+                                disabled={isLoading}
+                                aria-label={isPlaying ? "Pause" : "Play"}
+                                className="
+                                    flex h-11 w-11 shrink-0 items-center
+                                    justify-center rounded-full
+                                    border border-[#E8B47F]/60
+                                    bg-[#D99A61]/15 text-[#F2C69A]
+                                    shadow-[0_0_18px_rgba(217,154,97,0.08)]
+                                    transition-all duration-300
+                                    hover:border-[#F1BD88]
+                                    hover:bg-[#D99A61]/25
+                                    hover:shadow-[0_0_22px_rgba(217,154,97,0.2)]
+                                    active:scale-95 disabled:opacity-50
+                                "
+                            >
+                                {isLoading ? (
+                                    <span className="
+                                        h-4 w-4 animate-spin rounded-full
+                                        border-2 border-[#E8B47F]/30
+                                        border-t-[#F2C69A]
+                                    " />
+                                ) : isPlaying ? (
+                                    <Pause className="h-4 w-4 fill-current" />
                                 ) : (
-                                    <Volume2 className="h-4 w-4" />
+                                    <Play className="ml-0.5 h-4 w-4 fill-current" />
                                 )}
                             </button>
 
-                            <input
-                                type="range"
-                                min="0"
-                                max="100"
-                                value={volume}
-                                onChange={(event) =>
-                                    handleVolumeChange(Number(event.target.value))
-                                }
-                                aria-label="Volume"
-                                className="radio-volume-slider w-14 cursor-pointer sm:w-16"
-                            />
-                        </div>
+                            {/* Volume */}
+                            <div className="
+                                flex shrink-0 items-center gap-2
+                                border-l border-white/[0.12] pl-3
+                                sm:pl-4
+                            ">
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        handleVolumeChange(volume === 0 ? 65 : 0)
+                                    }
+                                    aria-label={volume === 0 ? "Unmute" : "Mute"}
+                                    className="
+                                        flex h-9 w-8 items-center justify-center
+                                        text-[#BBA995] transition
+                                        hover:text-[#F2C69A]
+                                    "
+                                >
+                                    {volume === 0 ? (
+                                        <VolumeX className="h-4 w-4" />
+                                    ) : (
+                                        <Volume2 className="h-4 w-4" />
+                                    )}
+                                </button>
 
-                        {/* External link - desktop only */}
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="100"
+                                    value={volume}
+                                    onChange={(event) =>
+                                        handleVolumeChange(Number(event.target.value))
+                                    }
+                                    aria-label="Volume"
+                                    className="
+                                        radio-volume-slider
+                                        w-20 cursor-pointer
+                                        sm:w-16
+                                    "
+                                />
+                            </div>
+
+                            {/* External link - desktop only */}
+                            <a
+                                href="https://somafm.com/groovesalad/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Open SomaFM Groove Salad"
+                                className="
+                                    hidden border-l border-white/[0.12]
+                                    pl-4 text-[#BBA995]
+                                    transition hover:text-[#F2C69A]
+                                    sm:block
+                                "
+                            >
+                                <ExternalLink className="h-4 w-4" />
+                            </a>
+                        </div>
+                    </div>
+
+                    {/* Error */}
+                    {error && (
+                        <div className="
+                            relative border-t border-red-300/15
+                            bg-red-950/20 px-5 py-2
+                        ">
+                            <p className="text-xs text-red-300">
+                                {error}
+                            </p>
+                        </div>
+                    )}
+
+                    {/* Always-bottom SomaFM branding */}
+                    <div className="
+                        relative flex items-center justify-center
+                        border-t border-white/[0.10]
+                        bg-black/[0.08] px-4 py-2
+                    ">
                         <a
                             href="https://somafm.com/groovesalad/"
                             target="_blank"
                             rel="noopener noreferrer"
-                            aria-label="Open SomaFM Groove Salad"
-                            className="
-                                hidden border-l border-white/[0.12]
-                                pl-4 text-[#BBA995]
-                                transition hover:text-[#F2C69A]
-                                sm:block
-                            "
+                            className="flex items-center gap-2"
                         >
-                            <ExternalLink className="h-4 w-4" />
+                            <span className="
+                                font-sans text-[8px] font-medium
+                                tracking-[0.2em] text-[#BBA995]/65
+                            ">
+                                POWERED BY
+                            </span>
+
+                            <span className="
+                                font-serif text-[11px] tracking-[0.18em]
+                                text-[#E8C49F]
+                            ">
+                                SOMAFM
+                            </span>
+
+                            <ExternalLink className="
+                                h-2.5 w-2.5 text-[#BBA995]/60
+                            " />
                         </a>
                     </div>
-                </div>
-
-                {/* Error */}
-                {error && (
-                    <div className="
-                        relative border-t border-red-300/15
-                        bg-red-950/20 px-5 py-2
-                    ">
-                        <p className="text-xs text-red-300">
-                            {error}
-                        </p>
-                    </div>
-                )}
-
-                {/* Always-bottom SomaFM branding */}
-                <div className="
-                    relative flex items-center justify-center
-                    border-t border-white/[0.10]
-                    bg-black/[0.08] px-4 py-2
-                ">
-                    <a
-                        href="https://somafm.com/groovesalad/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="
-                            flex items-center gap-2
-                            transition-opacity hover:opacity-100
-                        "
-                    >
-                        <span className="
-                            font-sans text-[8px] font-medium
-                            tracking-[0.2em] text-[#BBA995]/65
-                        ">
-                            Powered by
-                        </span>
-
-                        <span className="
-                            font-serif text-[11px] tracking-[0.18em]
-                            text-[#E8C49F]
-                        ">
-                            SomaFM
-                        </span>
-
-                        <ExternalLink className="
-                            h-2.5 w-2.5 text-[#BBA995]/60
-                        " />
-                    </a>
                 </div>
             </div>
         </div>

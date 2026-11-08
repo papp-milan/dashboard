@@ -85,20 +85,22 @@
    ========================================= */
 
 
+
 .radio-equalizer {
   display: flex;
   height: 40px;
-  align-items: center;
-  justify-content: center;
-  gap: 3px;
-  min-width: 100px;
+  min-width: 0;
   max-width: 180px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
 }
 
 .radio-equalizer-bar {
   width: 3px;
+  min-width: 2px;
   height: 3px;
-  flex-shrink: 0;
+  flex: 1;
   border-radius: 2px;
   background: linear-gradient(
           to top,
@@ -108,42 +110,45 @@
   opacity: 0.35;
 }
 
-
-/*
- * While playing, JavaScript updates the actual
- * bar heights from the audio frequency data.
- * No CSS animation is used.
- */
-
-/* =========================================
-   Volume Slider
-   ========================================= */
-
 .radio-volume-slider {
-  height: 4px;
+  height: 24px;
+  min-width: 0;
   appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  touch-action: pan-x;
+}
+
+.radio-volume-slider::-webkit-slider-runnable-track {
+  height: 3px;
   border-radius: 999px;
-  background: #68533e;
-  outline: none;
+  background: rgba(232, 196, 159, 0.2);
+}
+
+.radio-volume-slider::-moz-range-track {
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(232, 196, 159, 0.2);
 }
 
 .radio-volume-slider::-webkit-slider-thumb {
+  width: 12px;
+  height: 12px;
+  margin-top: -4.5px;
   appearance: none;
-  width: 11px;
-  height: 11px;
-  border-radius: 2px;
-  background: #e8c895;
-  border: 1px solid #fff0d4;
-  cursor: pointer;
+  -webkit-appearance: none;
+  border-radius: 50%;
+  background: #e8c49f;
+  box-shadow: 0 0 8px rgba(232, 196, 159, 0.25);
 }
 
 .radio-volume-slider::-moz-range-thumb {
-  width: 9px;
-  height: 9px;
-  border-radius: 2px;
-  background: #e8c895;
-  border: 1px solid #fff0d4;
-  cursor: pointer;
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: #e8c49f;
+  box-shadow: 0 0 8px rgba(232, 196, 159, 0.25);
 }
 
 /* =========================================
