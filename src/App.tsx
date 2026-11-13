@@ -96,6 +96,22 @@ export default function App() {
                         "
                     />
                 </div>
+                {/* GIF 4 */}
+                <div className="
+                    relative col-start-2 row-start-2
+                    translate-x-8 translate-y-4
+                    overflow-hidden rounded-sm
+                ">
+                    <img
+                        src='gifs/music.gif'
+                        alt=""
+                        className="
+                            h-full w-full object-cover
+                            transition-transform duration-500
+                            hover:scale-105
+                        "
+                    />
+                </div>
             </div>
 
             <RadioPlayer />
