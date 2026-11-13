@@ -39,6 +39,65 @@ export default function App() {
                 />
             </a>
 
+            <div className="
+                absolute z-10
+                hidden sm:grid
+                left-[7.4%] top-[47.5%]
+                h-[24%] w-[22%]
+                grid-cols-2 grid-rows-2
+                gap-3 md:gap-4
+            ">
+                {/* GIF 1 */}
+                <div className="
+                    relative col-start-1 row-start-1
+                    overflow-hidden rounded-sm
+                ">
+                    <img
+                        src='gifs/boxing.gif'
+                        alt=""
+                        className="
+                            h-full w-full object-cover
+                            transition-transform duration-500
+                            hover:scale-105
+                        "
+                    />
+                </div>
+
+                {/* GIF 2 */}
+                <div className="
+                    relative col-start-2 row-start-1
+                    translate-y-6
+                    overflow-hidden rounded-sm
+                ">
+                    <img
+                        src='gifs/coffee.gif'
+                        alt=""
+                        className="
+                            h-full w-full object-cover
+                            transition-transform duration-500
+                            hover:scale-105
+                        "
+                    />
+                </div>
+
+                {/* GIF 3 */}
+                <div className="
+                    relative col-start-1 row-start-2
+                    translate-x-8 -translate-y-2
+                    overflow-hidden rounded-sm
+                ">
+                    <img
+                        src='gifs/dogs.gif'
+                        alt=""
+                        className="
+                            h-full w-full object-cover
+                            transition-transform duration-500
+                            hover:scale-105
+                        "
+                    />
+                </div>
+            </div>
+
             <RadioPlayer />
 
             {/* Foreground content */}
@@ -59,6 +118,8 @@ export default function App() {
                 >
                     Does nothing.
                 </Button>
+
+
             </section>
         </main>
     )
