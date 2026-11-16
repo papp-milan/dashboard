@@ -341,17 +341,18 @@ export function RadioPlayer() {
             />
 
             {/* Mobile bottom sheet */}
-            <div className="fixed inset-x-0 bottom-0 z-50 sm:hidden">
+            <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 sm:hidden">
                 <div
                     className={`
+                        pointer-events-auto
                         relative mx-auto w-full max-w-[480px]
                         transition-transform duration-500
                         ease-[cubic-bezier(0.22,1,0.36,1)]
                         ${
-                        isMobileOpen
-                            ? "translate-y-0"
-                            : "translate-y-[calc(100%-30px)]"
-                    }
+                                        isMobileOpen
+                                            ? "translate-y-0"
+                                            : "translate-y-[calc(100%-30px)]"
+                                    }
                     `}
                 >
                     {/* Centered grabber */}

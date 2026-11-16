@@ -27,34 +27,38 @@ export default function App() {
             </a>
 
             {/* Bottom left links */}
-            <div className="absolute bottom-6 left-6 z-10 flex items-center gap-5">
+            <div className="absolute bottom-6 left-6 z-[100] flex items-center gap-5 pointer-events-auto">
 
                 {/* GitHub */}
                 <a
                     href="https://github.com/papp-milan/dashboard"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group h-8 w-8 md:h-12 md:w-12"
+                    aria-label="GitHub Repository"
+                    className="group block h-8 w-8 touch-manipulation md:h-12 md:w-12"
                 >
                     <img
                         src="/icons/github/github-white.svg"
-                        alt="GitHub"
-                        className="h-full w-full transition-transform duration-300 group-hover:scale-110"
+                        alt=""
+                        draggable={false}
+                        className="pointer-events-none h-full w-full select-none transition-transform duration-300 group-hover:scale-110"
                     />
                 </a>
 
-                {/* Links popover */}
+                {/* Quick Links */}
                 <Popover>
                     <PopoverTrigger asChild>
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-transparent md:h-12 md:w-12"
+                            aria-label="Quick Links öffnen"
+                            className="block h-8 w-8 touch-manipulation rounded-full bg-transparent p-0 hover:bg-transparent md:h-12 md:w-12"
                         >
                             <img
                                 src="/icons/links/links.svg"
-                                alt="Quick Links"
-                                className="h-full w-full"
+                                alt=""
+                                draggable={false}
+                                className="pointer-events-none h-full w-full select-none"
                             />
                         </Button>
                     </PopoverTrigger>
@@ -62,7 +66,7 @@ export default function App() {
                     <PopoverContent
                         side="top"
                         align="start"
-                        className="w-52 border-[#493E35] bg-[#211D1A]/95 text-[#F0E8DC] backdrop-blur-xl"
+                        className="z-[110] w-52 border-[#493E35] bg-[#211D1A]/95 text-[#F0E8DC] backdrop-blur-xl"
                     >
                         <div className="flex flex-col gap-1">
                             <p className="mb-2 px-2 text-xs font-medium uppercase tracking-widest text-[#A89B8D]">
