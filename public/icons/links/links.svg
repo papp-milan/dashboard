@@ -1,0 +1,17 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+  <defs>
+    <mask id="link-cutout">
+      <rect width="48" height="48" fill="white"></rect>
+
+      <!-- Transparent chain-link cutout -->
+      <g fill="none" stroke="black" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M19.5 28.5l-2 2a6 6 0 0 1-8.5-8.5l6-6a6 6 0 0 1 8.5 0"></path>
+        <path d="M28.5 19.5l2-2a6 6 0 0 1 8.5 8.5l-6 6a6 6 0 0 1-8.5 0"></path>
+        <path d="M17 31l14-14"></path>
+      </g>
+    </mask>
+  </defs>
+
+  <circle cx="24" cy="24" r="24" fill="white" mask="url(#link-cutout)"></circle>
+</svg>

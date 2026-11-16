@@ -1,7 +1,8 @@
-
-import { Button } from "@/components/ui/button"
-import { Globe } from "@/components/globe/Globe.tsx"
-import { RadioPlayer } from "@/components/radio-player/RadioPlayer.tsx"
+import {Button} from "@/components/ui/button"
+import {Globe} from "@/components/globe/Globe.tsx"
+import {RadioPlayer} from "@/components/radio-player/RadioPlayer.tsx"
+import {Popover, PopoverContent, PopoverTrigger,} from "@/components/ui/popover"
+import {ExternalLink} from "lucide-react"
 
 export default function App() {
     return (
@@ -25,19 +26,68 @@ export default function App() {
                 <Globe />
             </a>
 
-            {/* GitHub */}
-            <a
-                href="https://github.com/papp-milan/dashboard"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group absolute bottom-6 left-6 z-10 h-8 w-8 md:h-12 md:w-12"
-            >
-                <img
-                    src="/icons/github/github-white.svg"
-                    alt="GitHub logo"
-                    className="h-full w-full"
-                />
-            </a>
+            {/* Bottom left links */}
+            <div className="absolute bottom-6 left-6 z-10 flex items-center gap-5">
+
+                {/* GitHub */}
+                <a
+                    href="https://github.com/papp-milan/dashboard"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group h-8 w-8 md:h-12 md:w-12"
+                >
+                    <img
+                        src="/icons/github/github-white.svg"
+                        alt="GitHub"
+                        className="h-full w-full transition-transform duration-300 group-hover:scale-110"
+                    />
+                </a>
+
+                {/* Links popover */}
+                <Popover>
+                    <PopoverTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 rounded-full bg-transparent p-0 hover:bg-transparent md:h-12 md:w-12"
+                        >
+                            <img
+                                src="/icons/links/links.svg"
+                                alt="Quick Links"
+                                className="h-full w-full"
+                            />
+                        </Button>
+                    </PopoverTrigger>
+
+                    <PopoverContent
+                        side="top"
+                        align="start"
+                        className="w-52 border-[#493E35] bg-[#211D1A]/95 text-[#F0E8DC] backdrop-blur-xl"
+                    >
+                        <div className="flex flex-col gap-1">
+                            <p className="mb-2 px-2 text-xs font-medium uppercase tracking-widest text-[#A89B8D]">
+                                Quick Links
+                            </p>
+
+                            {[
+                                { label: "Forge", url: "https://forge.pappmilan.com" },
+                                { label: "Halyard", url: "https://halyard.pappmilan.com" },
+                            ].map((link) => (
+                                <a
+                                    key={link.label}
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center justify-between rounded-md px-2 py-2 text-sm transition-colors hover:bg-white/10"
+                                >
+                                    {link.label}
+                                    <ExternalLink className="h-3.5 w-3.5 opacity-50" />
+                                </a>
+                            ))}
+                        </div>
+                    </PopoverContent>
+                </Popover>
+            </div>
 
             <div className="
                 absolute z-10
